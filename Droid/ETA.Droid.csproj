@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -74,9 +74,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ETA\ETA.csproj">
+    <ProjectReference Include="..\ETA\ETA.Forms.csproj">
       <Project>{F83EC68A-99BB-4A2D-AD35-1CDF90E52C76}</Project>
-      <Name>ETA</Name>
+      <Name>ETA.Forms</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -10,14 +10,14 @@ namespace ETA.Shared
 	/// <summary>
 	/// Implementation of IEtaWebApi for productive use. Communicates over the network with the host.
 	/// </summary>
-	public class ProductiveEtaWebApi : IEtaWebApi
+	public class EtaWebApi : IEtaWebApi
 	{
 		/// <summary>
 		/// Creates an instance.
 		/// </summary>
 		/// <param name="hostUrl">base URL of the host without trailing slash</param>
 		/// <param name="logger"></param>
-		public ProductiveEtaWebApi (string hostUrl, ILogger logger)
+		public EtaWebApi (string hostUrl, ILogger logger)
 		{
 			Debug.Assert(!String.IsNullOrWhiteSpace(hostUrl));
 
@@ -63,29 +63,39 @@ namespace ETA.Shared
 			return xmlResponse;
 		}
 
-		public Task<string> GetApiVersionXmlAsync (CancellationToken token = default(CancellationToken))
+		public async Task<string> GetApiVersionXmlAsync (CancellationToken token = default(CancellationToken))
 		{
-			return this.GetXmlResponseAsync(this.hostUrl + "/user/api", token);
+			var xml = await this.GetXmlResponseAsync(this.hostUrl + "/user/api", token).ConfigureAwait(false);
+			this.logger?.Log($"'{nameof(GetApiVersionXmlAsync)}' received XML: {xml}");
+			return xml;
 		}
 
-		public Task<string> GetStockContentXmlAsync (CancellationToken token = default(CancellationToken))
+		public async Task<string> GetSuppliesXmlAsync (CancellationToken token = default(CancellationToken))
 		{
-			throw new NotImplementedException ();
+			var xml = await this.GetXmlResponseAsync(this.hostUrl + "/user/var/112/10201/0/0/12015", token).ConfigureAwait(false);
+			this.logger?.Log($"'{nameof(GetSuppliesXmlAsync)}' received XML: {xml}");
+            return xml;
 		}
 
-		public Task<string> GetStockContentWarningLevelXmlAsync(CancellationToken token = default(CancellationToken))
+		public async Task<string> GetSuppliesWarningLevelXml(CancellationToken token = default(CancellationToken))
 		{
-			throw new NotImplementedException ();
+			var xml = await this.GetXmlResponseAsync(this.hostUrl + "/user/var/112/10201/0/0/12042", token).ConfigureAwait(false);
+			this.logger?.Log($"'{nameof(GetSuppliesWarningLevelXml)}' received XML: {xml}");
+			return xml;
 		}
 
-		public Task<string> GetTotalConsumptionXmlAsync(CancellationToken token = default(CancellationToken))
+		public async Task<string> GetTotalConsumptionXmlAsync(CancellationToken token = default(CancellationToken))
 		{
-			throw new NotImplementedException ();
+			var xml = await this.GetXmlResponseAsync(this.hostUrl + "/user/var/112/10021/0/0/12016", token).ConfigureAwait(false);
+			this.logger?.Log($"'{nameof(GetTotalConsumptionXmlAsync)}' received XML: {xml}");
+			return xml;
 		}
 
-		public Task<string> GetErrorsXmlAsync(CancellationToken token = default(CancellationToken))
+		public async Task<string> GetErrorsXmlAsync(CancellationToken token = default(CancellationToken))
 		{
-			throw new NotImplementedException ();
+			var xml = await this.GetXmlResponseAsync(this.hostUrl + "/user/errors", token).ConfigureAwait(false);
+			this.logger?.Log($"'{nameof(GetErrorsXmlAsync)}' received XML: {xml}");
+			return xml;
 		}
 	}
 }

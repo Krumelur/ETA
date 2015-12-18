@@ -96,9 +96,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ETA\ETA.csproj">
+    <ProjectReference Include="..\ETA\ETA.Forms.csproj">
       <Project>{F83EC68A-99BB-4A2D-AD35-1CDF90E52C76}</Project>
-      <Name>ETA</Name>
+      <Name>ETA.Forms</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

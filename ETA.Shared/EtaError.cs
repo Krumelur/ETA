@@ -9,7 +9,7 @@ namespace ETA.Shared
 	/// </summary>
 	public struct EtaError
 	{
-		public EtaError (string message, string reason, DateTime occurredAt)
+		public EtaError(string message, string reason, DateTime occurredAt)
 		{
 			this.Message = message;
 			this.Reason = reason;
@@ -40,11 +40,7 @@ namespace ETA.Shared
 			get;
 		}
 
-		public override string ToString ()
-		{
-			return $"[EtaError: Message={this.Message}, Reason={this.Reason}, OccurredAt={this.OccurredAt}]";
-		}
+		public override string ToString() => $"[EtaError: Message={this.Message}, Reason={this.Reason}, OccurredAt={this.OccurredAt}]";
 	}
-
 }
 

@@ -36,15 +36,9 @@ namespace ETA.Shared
 		/// Implicitly cast a numeric unit to a double.
 		/// </summary>
 		/// <param name="numUnit">Number unit.</param>
-		public static implicit operator double(NumericUnit numUnit)
-		{
-			return numUnit.Value;
-		}
+		public static implicit operator double(NumericUnit numUnit) => numUnit.Value;
 
-		public override string ToString ()
-		{
-			return $"[NumericUnit: Value={this.Value}, Unit={this.Unit}]";
-		}
+		public override string ToString () => $"[NumericUnit: Value={this.Value}, Unit={this.Unit}]";
 	}
 
 }

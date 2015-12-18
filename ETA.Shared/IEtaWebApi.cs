@@ -24,7 +24,7 @@ namespace ETA.Shared
 		Task<string> GetApiVersionXmlAsync(CancellationToken token = default(CancellationToken));
 
 		/// <summary>
-		/// Gets the stock content.
+		/// Gets the remaining supplies.
 		/// </summary>
 		/// <description>>
 		/// Located at: /user/var/112/10201/0/0/12015
@@ -35,7 +35,7 @@ namespace ETA.Shared
 		/// </eta>
 		/// </description>
 		/// <returns>The stock content.</returns>
-		Task<string> GetStockContentXmlAsync(CancellationToken token = default(CancellationToken));
+		Task<string> GetSuppliesXmlAsync(CancellationToken token = default(CancellationToken));
 
 		/// <summary>
 		/// Gets the stock content warning level.
@@ -49,7 +49,7 @@ namespace ETA.Shared
 		/// </eta>
 		/// </description>
 		/// <returns>The stock warning level.</returns>
-		Task<string> GetStockContentWarningLevelXmlAsync(CancellationToken token = default(CancellationToken));
+		Task<string> GetSuppliesWarningLevelXml(CancellationToken token = default(CancellationToken));
 
 		/// <summary>
 		/// Gets the total consumption.

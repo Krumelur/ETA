@@ -2,9 +2,12 @@ using System.Threading.Tasks;
 
 namespace ETA.Shared
 {
-	public sealed class EtaConfig
+	/// <summary>
+	/// Configuration information.
+	/// </summary>
+	public struct EtaConfig
 	{
-		public EtaConfig (string hostName, int port = 8080)
+		public EtaConfig (string hostName, int port = 8080) : this()
 		{
 			this.Host = hostName;
 			this.Port = port;
@@ -66,10 +69,7 @@ namespace ETA.Shared
 			}
 		}
 
-		public override string ToString ()
-		{
-			return $"[EtaConfig: Host={this.Host}, Port={this.Port}]";
-		}
+		public override string ToString () => $"[EtaConfig: Host={this.Host}, Port={this.Port}]";
 	}
 }
 

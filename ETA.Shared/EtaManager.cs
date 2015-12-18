@@ -14,19 +14,13 @@ namespace ETA.Shared
 	public sealed class EtaManager
 	{
 		/// <summary>
-		/// Singleton of the manager.
-		/// </summary>
-		public static EtaManager Instance { get; private set; }
-		
-		/// <summary>
-		/// Private constructor. Use static Instance property.
+		/// Creates a new instance.
 		/// </summary>
 		/// <param name="webApi">implementation to use for server communication</param>
-		EtaManager(IEtaWebApi webApi, ILogger logger)
+		public EtaManager(IEtaWebApi webApi, ILogger logger)
 		{
 			this.webApi = webApi;
 			this.logger = logger;
-			Instance = this;
 		}
 		IEtaWebApi webApi;
 		ILogger logger;
@@ -43,7 +37,7 @@ namespace ETA.Shared
 		/// <returns>true if initialization is correct</returns>
 		bool CheckInitialization([CallerMemberName] string caller = null)
 		{
-			if (this.Config != null && this.Config.ConnectionAddress != null)
+			if (this.Config.ConnectionAddress != null)
 			{
 				return true;
 			}

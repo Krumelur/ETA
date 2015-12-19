@@ -43,12 +43,6 @@
       <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Droid\ETA.Droid.csproj">
-      <Project>{039B46ED-601C-474C-9EC4-E6B0DC4E4B9D}</Project>
-      <Name>ETA.Droid</Name>
-      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\ETA.Shared\ETA.Shared.csproj">
       <Project>{BFF8A6FE-174C-4E09-9E4F-BFE2C108E044}</Project>
       <Name>ETA.Shared</Name>

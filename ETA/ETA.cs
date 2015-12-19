@@ -1,5 +1,5 @@
 ﻿using System;
-
+using ETA.Shared;
 using Xamarin.Forms;
 
 namespace ETA
@@ -8,6 +8,11 @@ namespace ETA
 	{
 		public App ()
 		{
+			EtaManager.InitDefaultDependencies();
+
+			EtaManager.Instance.Config = new EtaConfig("192.168.178.35", 8080);
+			var supplies = EtaManager.Instance.GetSuppliesAsync().Result;
+
 			// The root page of your application
 			MainPage = new ContentPage {
 				Content = new StackLayout {
@@ -15,7 +20,7 @@ namespace ETA
 					Children = {
 						new Label {
 							XAlign = TextAlignment.Center,
-							Text = "Welcome to Xamarin Forms!"
+							Text = supplies.ToString()
 						}
 					}
 				}

@@ -39,8 +39,24 @@ namespace ETA.Shared
 		{
 			get;
 		}
-
 		public override string ToString() => $"[EtaError: Message={this.Message}, Reason={this.Reason}, OccurredAt={this.OccurredAt}]";
+
+		public override bool Equals(object obj)
+		{
+			return obj is EtaError && this == (EtaError)obj;
+		}
+		public override int GetHashCode()
+		{
+			return this.Message.GetHashCode() ^ this.Reason.GetHashCode() ^ this.OccurredAt.GetHashCode();
+		}
+		public static bool operator ==(EtaError x, EtaError y)
+		{
+			return x.Message == y.Message && x.Reason == y.Reason && x.OccurredAt == y.OccurredAt;
+		}
+		public static bool operator !=(EtaError x, EtaError y)
+		{
+			return !(x == y);
+		}
 	}
 }
 

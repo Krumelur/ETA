@@ -5,9 +5,9 @@ namespace ETA.Shared
 	/// <summary>
 	/// Configuration information.
 	/// </summary>
-	public struct EtaConfig
+	public sealed class EtaConfig
 	{
-		public EtaConfig (string hostName, int port = 8080) : this()
+		public EtaConfig (string hostName, int port = 8080)
 		{
 			this.Host = hostName;
 			this.Port = port;

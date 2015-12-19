@@ -66,6 +66,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StructTests.cs" />
     <Compile Include="EtaManagerTests.cs" />
     <Compile Include="ProductiveEtaWebApiTests.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

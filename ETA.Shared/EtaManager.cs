@@ -5,6 +5,8 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using System.Linq;
+using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Practices.ServiceLocation;
 
 namespace ETA.Shared
 {
@@ -13,6 +15,26 @@ namespace ETA.Shared
 	/// </summary>
 	public sealed class EtaManager
 	{
+		public static void InitDefaultDependencies(ILogger customLogger = null)
+		{
+			SimpleIoc.Default.Register<IEtaWebApi, EtaWebApi>();
+			if (customLogger == null)
+			{
+				SimpleIoc.Default.Register<ILogger, DebugLogger>();
+			}
+			else
+			{
+				SimpleIoc.Default.Register<ILogger>(() => customLogger);
+				customLogger.Log("Custom logger successfully registered!");
+			}
+			SimpleIoc.Default.Register<EtaManager>();
+		}
+
+		/// <summary>
+		/// Gets the only instance of the manager.
+		/// </summary>
+		public static EtaManager Instance => SimpleIoc.Default.GetInstance<EtaManager>();
+
 		/// <summary>
 		/// Creates a new instance.
 		/// </summary>
@@ -28,7 +50,18 @@ namespace ETA.Shared
 		/// <summary>
 		/// Configuration options.
 		/// </summary>
-		public EtaConfig Config { get; set; }
+		public EtaConfig Config {
+			get
+			{
+				return this.config;
+			}
+			set
+			{
+				this.config = value;
+				this.webApi.SetHostUrl(this.config.ConnectionAddress);
+			}
+		}
+		EtaConfig config;
 		
 		/// <summary>
 		/// Helper to check config before performing a call to the web API.
@@ -48,14 +81,16 @@ namespace ETA.Shared
 			}
 		}
 
-		IList<XElement> GetContentElements(string xml, string elementName)
+		IList<XElement> GetContentElements(string xml, string elementName, bool includeDescendants = false)
 		{
 			List<XElement> elements = null;
 			try
 			{
 				var xmlDoc = XDocument.Parse(xml);
 				var ns = xmlDoc.Root.GetDefaultNamespace();
-				elements = xmlDoc.Root.Elements(ns + elementName).ToList();
+				elements = includeDescendants
+					? xmlDoc.Root.Descendants(ns + elementName).ToList()
+					: xmlDoc.Root.Elements(ns + elementName).ToList();
 			}
 			catch (Exception ex)
 			{
@@ -65,9 +100,9 @@ namespace ETA.Shared
 			return elements;
 		}
 
-		XElement GetContentElement(string xml, string elementName)
+		XElement GetContentElement(string xml, string elementName, bool includeDescendants = false)
 		{
-			var elements = this.GetContentElements(xml, elementName);
+			var elements = this.GetContentElements(xml, elementName, includeDescendants);
 			return elements?.SingleOrDefault();
 		}
 
@@ -103,24 +138,111 @@ namespace ETA.Shared
 			return apiVersion;
 		}
 
-		public Task<NumericUnit> GetStockContentAsync(CancellationToken token = default(CancellationToken))
+		public async Task<NumericUnit> GetSuppliesAsync(CancellationToken token = default(CancellationToken))
 		{
-			throw new NotImplementedException();
+			if (!this.CheckInitialization())
+			{
+				return NumericUnit.Empty;
+			}
+
+			string xmlResponse = await this.webApi.GetSuppliesXmlAsync(token).ConfigureAwait(false);
+			NumericUnit amount = NumericUnit.Empty;
+
+			try
+			{
+				var value = this.GetContentElement(xmlResponse, "value").Attribute("strValue").Value;
+				var unit= this.GetContentElement(xmlResponse, "value").Attribute("unit").Value;
+
+				amount = new NumericUnit(Convert.ToDouble(value), unit);
+			}
+			catch (Exception ex)
+			{
+				this.logger?.Log(ex);
+			}
+
+			return amount;
 		}
 
-		public Task<NumericUnit> GetStockContentWarningLevelAsync(CancellationToken token = default(CancellationToken))
+		public async Task<NumericUnit> GetSuppliesWarningLevelAsync(CancellationToken token = default(CancellationToken))
 		{
-			throw new NotImplementedException();
+			if (!this.CheckInitialization())
+			{
+				return NumericUnit.Empty;
+			}
+
+			string xmlResponse = await this.webApi.GetSuppliesWarningLevelXml(token).ConfigureAwait(false);
+			NumericUnit amount = NumericUnit.Empty;
+
+			try
+			{
+				var value = this.GetContentElement(xmlResponse, "value").Attribute("strValue").Value;
+				var unit = this.GetContentElement(xmlResponse, "value").Attribute("unit").Value;
+
+				amount = new NumericUnit(Convert.ToDouble(value), unit);
+			}
+			catch (Exception ex)
+			{
+				this.logger?.Log(ex);
+			}
+
+			return amount;
 		}
 
-		public Task<NumericUnit> GetTotalConsumptionAsync(CancellationToken token = default(CancellationToken))
+		public async Task<NumericUnit> GetTotalConsumptionAsync(CancellationToken token = default(CancellationToken))
 		{
-			throw new NotImplementedException();
+			if (!this.CheckInitialization())
+			{
+				return NumericUnit.Empty;
+			}
+
+			string xmlResponse = await this.webApi.GetTotalConsumptionXmlAsync(token).ConfigureAwait(false);
+			NumericUnit amount = NumericUnit.Empty;
+
+			try
+			{
+				var value = this.GetContentElement(xmlResponse, "value").Attribute("strValue").Value;
+				var unit = this.GetContentElement(xmlResponse, "value").Attribute("unit").Value;
+
+				amount = new NumericUnit(Convert.ToDouble(value), unit);
+			}
+			catch (Exception ex)
+			{
+				this.logger?.Log(ex);
+			}
+
+			return amount;
 		}
 
-		public Task<IList<EtaError>> GetErrorsAsync(CancellationToken token = default(CancellationToken))
+
+		public async Task<IList<EtaError>> GetErrorsAsync(CancellationToken token = default(CancellationToken))
 		{
-			throw new NotImplementedException();
+			if (!this.CheckInitialization())
+			{
+				return null;
+			}
+
+			string xmlResponse = await this.webApi.GetErrorsXmlAsync(token).ConfigureAwait(false);
+
+			List<EtaError> errors = new List<EtaError>();
+
+			try
+			{
+				foreach (var errorEl in this.GetContentElements(xmlResponse, "error", true))
+				{
+					var msg = errorEl.Attribute("msg").Value;
+					var time = Convert.ToDateTime(errorEl.Attribute("time").Value);
+					var desc = errorEl.Value.ToString();
+
+					var error = new EtaError(msg, desc, time);
+					errors.Add(error);
+				}
+			}
+			catch (Exception ex)
+			{
+				this.logger?.Log(ex);
+			}
+
+			return errors;
 		}
 	}
 }

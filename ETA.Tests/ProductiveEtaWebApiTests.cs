@@ -16,13 +16,14 @@ namespace ETA.Tests
 		[TestFixtureSetUp]
 		public void Setup()
 		{
-			this.webApi = new EtaWebApi("http://192.168.178.35:8080", null);
+			this.webApi = new EtaWebApi(null);
+			this.webApi.SetHostUrl("http://192.168.178.35:8080");
 		}
 
 		IEtaWebApi webApi;
 
 		[Test]
-		public async Task Cancel_Async_Rest_Method_Should_Not_Crash ()
+		public async Task EtaWebService_Cancel_Async_Rest_Method_Should_Not_Crash ()
 		{
 			var cts = new CancellationTokenSource();
 			
@@ -35,7 +36,7 @@ namespace ETA.Tests
 		}
 
 		[Test]
-		public async Task Get_Api_Version_Should_Succeed()
+		public async Task EtaWebService_GetApiVersionXml_Should_Succeed()
 		{
 			var resultXml = await this.webApi.GetApiVersionXmlAsync();
 			// Expecting a valid value if the call has succeeded.
@@ -43,7 +44,7 @@ namespace ETA.Tests
 		}
 
 		[Test]
-		public async Task Get_Errors_Should_Succeed()
+		public async Task EtaWebService_GetErrorsXml_Should_Succeed()
 		{
 			var resultXml = await this.webApi.GetErrorsXmlAsync();
 			// Expecting a valid value if the call has succeeded.
@@ -51,7 +52,7 @@ namespace ETA.Tests
 		}
 
 		[Test]
-		public async Task Get_Supplies_Warning_Level_Should_Succeed()
+		public async Task EtaWebService_GetSuppliesXmlWarningLevelXml_Should_Succeed()
 		{
 			var resultXml = await this.webApi.GetSuppliesWarningLevelXml();
 			// Expecting a valid value if the call has succeeded.
@@ -59,7 +60,7 @@ namespace ETA.Tests
 		}
 
 		[Test]
-		public async Task Get_Supplies_Should_Succeed()
+		public async Task EtaWebService_GetSuppliesXml_Should_Succeed()
 		{
 			var resultXml = await this.webApi.GetSuppliesXmlAsync();
 			// Expecting a valid value if the call has succeeded.
@@ -67,7 +68,7 @@ namespace ETA.Tests
 		}
 
 		[Test]
-		public async Task Get_Total_Consumption_Should_Succeed()
+		public async Task EtaWebService_GetTotalConsumptionXml_Should_Succeed()
 		{
 			var resultXml = await this.webApi.GetTotalConsumptionXmlAsync();
 			// Expecting a valid value if the call has succeeded.

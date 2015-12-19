@@ -78,6 +78,120 @@ namespace ETA.Tests
 			var apiVersion = await this.etaManager.GetApiVersionAsync();
 			apiVersion.ShouldBeNull();
 		}
+
+		[Test]
+		public async Task GetSuppliesXmlAsync_Should_Return_Valid_Amount()
+		{
+			// Create a random value so we're not always testing agsinst the same hardcoded value.
+			var expectedSuppliesAmount = this.fixture.Create<NumericUnit>();
+
+			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
+			var xml =
+				@"<?xml version=""1.0"" encoding=""utf - 8""?>" +
+				@"<eta version=""1.0"" xmlns=""http://www.eta.co.at/rest/v1"">" +
+					@"<value uri=""/user/var/112/10201/0/0/12015"" strValue=""" + expectedSuppliesAmount.Value + @""" unit=""" + expectedSuppliesAmount.Unit + @""" decPlaces=""0"" scaleFactor=""10"" advTextOffset=""0"">" + expectedSuppliesAmount.Value + "</value>" +
+				@"</eta>";
+
+			// Make the mock return the XML from above.
+			this.etaWebApiMock.Setup(x => x.GetSuppliesXmlAsync(CancellationToken.None)).ReturnsAsync(xml);
+
+			// Call EtaManager method. EtaManager uses IEtaWebApi (passed in by DI Container) and will receive the XML specified in the mock. Magic.
+			var amount = await this.etaManager.GetSuppliesAsync();
+
+			// Whatever the actual version string is - we don't care, but it must match our original version.
+			amount.ShouldEqual(expectedSuppliesAmount);
+		}
+
+		[Test]
+		public async Task GetSuppliesXmlAsync_Should_Return_Empty_Amount_for_invalid_XML()
+		{
+			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
+			var xml = "<xml>some invalid xml</xml>";
+
+			// Make the mock return the XML from above.
+			this.etaWebApiMock.Setup(x => x.GetSuppliesXmlAsync(CancellationToken.None)).ReturnsAsync(xml);
+
+			// Call EtaManager method. EtaManager uses IEtaWebApi (passed in by DI Container) and will receive the XML specified in the mock. Magic.
+			var amount = await this.etaManager.GetSuppliesAsync();
+
+			// Whatever the actual version string is - we don't care, but it must match our original version.
+			amount.ShouldEqual(NumericUnit.Empty);
+		}
+
+		[Test]
+		public async Task GetStockContentWarningLevelAsync_Should_Return_Valid_Amount()
+		{
+			// Create a random value so we're not always testing agsinst the same hardcoded value.
+			var expectedSuppliesWarningLevelAmount = this.fixture.Create<NumericUnit>();
+
+			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
+			var xml =
+				@"<?xml version=""1.0"" encoding=""utf - 8""?>" +
+				@"<eta version=""1.0"" xmlns=""http://www.eta.co.at/rest/v1"">" +
+					@"<value uri=""/user/var/112/10201/0/0/12042"" strValue=""" + expectedSuppliesWarningLevelAmount.Value + @""" unit=""" + expectedSuppliesWarningLevelAmount.Unit + @""" decPlaces=""0"" scaleFactor=""10"" advTextOffset=""0"">" + expectedSuppliesWarningLevelAmount.Value + "</value>" +
+				@"</eta>";
+
+			// Make the mock return the XML from above.
+			this.etaWebApiMock.Setup(x => x.GetSuppliesWarningLevelXml(CancellationToken.None)).ReturnsAsync(xml);
+
+			// Call EtaManager method. EtaManager uses IEtaWebApi (passed in by DI Container) and will receive the XML specified in the mock. Magic.
+			var amount = await this.etaManager.GetSuppliesWarningLevelAsync();
+
+			// Whatever the actual version string is - we don't care, but it must match our original version.
+			amount.ShouldEqual(expectedSuppliesWarningLevelAmount);
+		}
+
+		[Test]
+		public async Task GetTotalConsumptionAsync_Should_Return_Valid_Amount()
+		{
+			// Create a random value so we're not always testing agsinst the same hardcoded value.
+			var expectedConsumption = this.fixture.Create<NumericUnit>();
+
+			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
+			var xml =
+				@"<?xml version=""1.0"" encoding=""utf - 8""?>" +
+				@"<eta version=""1.0"" xmlns=""http://www.eta.co.at/rest/v1"">" +
+					@"<value uri=""/user/var/112/10201/0/0/12016"" strValue=""" + expectedConsumption.Value + @""" unit=""" + expectedConsumption.Unit + @""" decPlaces=""0"" scaleFactor=""10"" advTextOffset=""0"">" + expectedConsumption.Value + "</value>" +
+				@"</eta>";
+
+			// Make the mock return the XML from above.
+			this.etaWebApiMock.Setup(x => x.GetTotalConsumptionXmlAsync(CancellationToken.None)).ReturnsAsync(xml);
+
+			// Call EtaManager method. EtaManager uses IEtaWebApi (passed in by DI Container) and will receive the XML specified in the mock. Magic.
+			var amount = await this.etaManager.GetTotalConsumptionAsync();
+
+			// Whatever the actual version string is - we don't care, but it must match our original version.
+			amount.ShouldEqual(expectedConsumption);
+		}
+
+		[Test]
+		public async Task GetErrorsAsync_Should_Return_List_of_errors()
+		{
+			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
+			var xml =
+				@"<?xml version=""1.0"" encoding=""utf - 8""?>" +
+				@"<eta version=""1.0"" xmlns=""http://www.eta.co.at/rest/v1"">" +
+					@"<errors uri=""/user/errors"">" +
+						@"<fub uri=""/112/10021"" name=""Kessel"">" +
+							@"<error msg=""Flue gas sensor Interrupted"" priority=""Error"" time=""2011-06-29 12:47:50"">Sensor or Cable broken or badly connected</error>" +
+							@"<error msg=""Water pressure too low 0,00 bar"" priority=""Error"" time=""2011-06-29 12:48:12"">Top up heating water! If this warning occurs more than once a year, please contact plumber.</error>" +
+						@"</fub>" +
+						@"<fub uri=""/112/10101"" name=""HK1""/>" +
+					@"</errors>" +
+				@"</eta>";
+
+			// Make the mock return the XML from above.
+			this.etaWebApiMock.Setup(x => x.GetErrorsXmlAsync(CancellationToken.None)).ReturnsAsync(xml);
+
+			// Call EtaManager method. EtaManager uses IEtaWebApi (passed in by DI Container) and will receive the XML specified in the mock. Magic.
+			var errors = await this.etaManager.GetErrorsAsync();
+
+			// Expecting two errors from the XML above.
+			errors.Count.ShouldEqual(2);
+
+			// Expecting dates and message to be correct.
+			errors[0].ShouldEqual(new EtaError("Flue gas sensor Interrupted", "Sensor or Cable broken or badly connected", new DateTime(2011, 6, 29, 12, 47, 50)));
+		}
 	}
 }
 

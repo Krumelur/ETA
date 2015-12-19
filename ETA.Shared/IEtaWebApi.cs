@@ -10,6 +10,12 @@ namespace ETA.Shared
 	public interface IEtaWebApi
 	{
 		/// <summary>
+		/// Sets the host URL (no trailing slash expected).
+		/// </summary>
+		/// <param name="connectionAddress"></param>
+		void SetHostUrl(string connectionAddress);
+
+		/// <summary>
 		/// Gets the API version of the webservice.
 		/// </summary>
 		/// <description>

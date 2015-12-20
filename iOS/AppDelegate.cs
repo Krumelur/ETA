@@ -21,6 +21,13 @@ namespace ETA.iOS
 
 			LoadApplication (new App ());
 
+			/*
+			UITabBar.Appearance.BarTintColor = UIColor.Black;
+			UITabBar.Appearance.SelectedImageTintColor = UIColor.White;
+			UINavigationBar.Appearance.BarTintColor = UIColor.Black;
+			UINavigationBar.Appearance.SetTitleTextAttributes(new UITextAttributes { TextColor = UIColor.White });
+			*/
+
 			return base.FinishedLaunching (app, options);
 		}
 	}

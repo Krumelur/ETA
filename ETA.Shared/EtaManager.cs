@@ -17,6 +17,7 @@ namespace ETA.Shared
 	{
 		public static void InitDefaultDependencies(ILogger customLogger = null)
 		{
+			ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 			SimpleIoc.Default.Register<IEtaWebApi, EtaWebApi>();
 			if (customLogger == null)
 			{
@@ -70,13 +71,13 @@ namespace ETA.Shared
 		/// <returns>true if initialization is correct</returns>
 		bool CheckInitialization([CallerMemberName] string caller = null)
 		{
-			if (this.Config.ConnectionAddress != null)
+			if (this.Config?.ConnectionAddress != null)
 			{
 				return true;
 			}
 			else
 			{
-				this.logger?.Log($"[{caller}] failed due to uninitialized configuration - call Initialize() first.");
+				this.logger?.Log($"[{caller}] failed due to uninitialized configuration - set the Config property.");
 				return false;
 			}
 		}

@@ -1,17 +1,22 @@
 using System;
-using System.Net.Http;
-using System.Threading;
-using ModernHttpClient;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using System.Linq;
 
 namespace ETA.Shared
 {
+	/// <summary>
+	/// Interface for logging purposes.
+	/// </summary>
 	public interface ILogger
 	{
+		/// <summary>
+		/// Logs a string.
+		/// </summary>
+		/// <param name="s">message to log</param>
 		void Log(string s);
 
+		/// <summary>
+		/// Logs an exception.
+		/// </summary>
+		/// <param name="ex">Exception to log</param>
 		void Log(Exception ex);
 	}
 

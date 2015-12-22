@@ -29,6 +29,14 @@ namespace ETA.Shared
 		/// </summary>
 		public ViewModelLocator ()
 		{
+			ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
+
+			// Support classes.
+			SimpleIoc.Default.Register<IEtaWebApi, EtaWebApi>();
+			SimpleIoc.Default.Register<ILogger, DebugLogger>();
+			SimpleIoc.Default.Register<EtaManager>();
+
+			// View Models.
 			SimpleIoc.Default.Register<SuppliesViewModel> ();
 		}
 

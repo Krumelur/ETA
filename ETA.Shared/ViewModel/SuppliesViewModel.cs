@@ -10,19 +10,16 @@ namespace ETA.Shared
 	/// </summary>
 	public class SuppliesViewModel : BaseViewModel
 	{
-		public SuppliesViewModel (EtaManager manager) : base ()
+		public SuppliesViewModel (EtaManager manager) : base (manager)
 		{
-			this.manager = manager;
 		}
-
-		EtaManager manager;
 
 		public ICommand UpdateSuppliesInfoCommand
 		{
 			get
 			{
 				return new RelayCommand(async () => {
-					this.supplies = await this.manager.GetSuppliesAsync();
+					this.supplies = await this.Manager.GetSuppliesAsync();
 					this.RaisePropertyChanged(nameof(SuppliesDisplayValue));
 				}, () => true);
 			}

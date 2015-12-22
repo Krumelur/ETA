@@ -1,15 +1,17 @@
 ﻿using ETA.Shared;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+using System;
+
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
 namespace ETA
 {
+
 	public partial class App : Application
 	{
 		public App ()
 		{
-			EtaManager.InitDefaultDependencies();
-			EtaManager.Instance.Config = new EtaConfig("192.168.178.35", 8080);
-
 			this.InitializeComponent();
 
 			var suppliesPage = new SuppliesStatusPage();

@@ -5,8 +5,6 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using System.Linq;
-using GalaSoft.MvvmLight.Ioc;
-using Microsoft.Practices.ServiceLocation;
 
 namespace ETA.Shared
 {
@@ -15,38 +13,25 @@ namespace ETA.Shared
 	/// </summary>
 	public sealed class EtaManager
 	{
-		public static void InitDefaultDependencies(ILogger customLogger = null)
-		{
-			ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-			SimpleIoc.Default.Register<IEtaWebApi, EtaWebApi>();
-			if (customLogger == null)
-			{
-				SimpleIoc.Default.Register<ILogger, DebugLogger>();
-			}
-			else
-			{
-				SimpleIoc.Default.Register<ILogger>(() => customLogger);
-				customLogger.Log("Custom logger successfully registered!");
-			}
-			SimpleIoc.Default.Register<EtaManager>();
-		}
-
-		/// <summary>
-		/// Gets the only instance of the manager.
-		/// </summary>
-		public static EtaManager Instance => SimpleIoc.Default.GetInstance<EtaManager>();
-
 		/// <summary>
 		/// Creates a new instance.
 		/// </summary>
 		/// <param name="webApi">implementation to use for server communication</param>
+		/// <param name="logger">logger to use</param>
 		public EtaManager(IEtaWebApi webApi, ILogger logger)
 		{
 			this.webApi = webApi;
-			this.logger = logger;
+			this.Logger = logger;
 		}
 		IEtaWebApi webApi;
-		ILogger logger;
+
+		/// <summary>
+		/// Used for log output.By default this logs to the debug console but you can set your own logger.
+		/// </summary>
+		public ILogger Logger
+		{
+			get; set;
+		}
 
 		/// <summary>
 		/// Configuration options.
@@ -77,7 +62,7 @@ namespace ETA.Shared
 			}
 			else
 			{
-				this.logger?.Log($"[{caller}] failed due to uninitialized configuration - set the Config property.");
+				this.Logger?.Log($"[{caller}] failed due to uninitialized configuration - set the Config property.");
 				return false;
 			}
 		}
@@ -95,7 +80,7 @@ namespace ETA.Shared
 			}
 			catch (Exception ex)
 			{
-				this.logger?.Log(ex);
+				this.Logger?.Log(ex);
 			}
 
 			return elements;
@@ -133,7 +118,7 @@ namespace ETA.Shared
 			}
 			catch (Exception ex)
 			{
-				this.logger?.Log(ex);
+				this.Logger?.Log(ex);
 			}
 
 			return apiVersion;
@@ -158,7 +143,7 @@ namespace ETA.Shared
 			}
 			catch (Exception ex)
 			{
-				this.logger?.Log(ex);
+				this.Logger?.Log(ex);
 			}
 
 			return amount;
@@ -183,7 +168,7 @@ namespace ETA.Shared
 			}
 			catch (Exception ex)
 			{
-				this.logger?.Log(ex);
+				this.Logger?.Log(ex);
 			}
 
 			return amount;
@@ -208,12 +193,11 @@ namespace ETA.Shared
 			}
 			catch (Exception ex)
 			{
-				this.logger?.Log(ex);
+				this.Logger?.Log(ex);
 			}
 
 			return amount;
 		}
-
 
 		public async Task<IList<EtaError>> GetErrorsAsync(CancellationToken token = default(CancellationToken))
 		{
@@ -233,14 +217,16 @@ namespace ETA.Shared
 					var msg = errorEl.Attribute("msg").Value;
 					var time = Convert.ToDateTime(errorEl.Attribute("time").Value);
 					var desc = errorEl.Value.ToString();
+					var errorTypeRaw = errorEl.Attribute("priority").Value;
+					var errorType = errorTypeRaw.ToLower().Contains("warn") ? EtaError.ERROR_TYPE.Warning : EtaError.ERROR_TYPE.Error;
 
-					var error = new EtaError(msg, desc, time);
+					var error = new EtaError(msg, desc, time, errorType);
 					errors.Add(error);
 				}
 			}
 			catch (Exception ex)
 			{
-				this.logger?.Log(ex);
+				this.Logger?.Log(ex);
 			}
 
 			return errors;

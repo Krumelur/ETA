@@ -6,8 +6,6 @@ using System.Threading;
 using Ploeh.AutoFixture;
 using Moq;
 using Should;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Ioc;
 
 namespace ETA.Tests
 {
@@ -20,22 +18,30 @@ namespace ETA.Tests
 		[TestFixtureSetUp]
 		public void Setup()
 		{
-			// Use AutoFixture to generate values.
-			this.fixture = new Fixture();
+			try
+			{
+				// Use AutoFixture to generate values.
+				this.fixture = new Fixture();
 
-			// Create mocks for our interfaces.
-			this.etaWebApiMock = new Mock<IEtaWebApi>();
-			this.loggerMock = new Mock<ILogger>();
+				// Create mocks for our interfaces.
+				this.etaWebApiMock = new Mock<IEtaWebApi>();
+				this.loggerMock = new Mock<ILogger>();
 
-			// Register mocks as implementations for the interfaces in DI container.
-			SimpleIoc.Default.Register<IEtaWebApi>(() => this.etaWebApiMock.Object);
-			SimpleIoc.Default.Register<ILogger>(() => this.loggerMock.Object);
-			SimpleIoc.Default.Register<EtaManager>();
+				this.etaManager = new EtaManager(this.etaWebApiMock.Object, this.loggerMock.Object);
 
-			// Create EtaManager through DI container to inject interface implementations.
-			this.etaManager = SimpleIoc.Default.GetInstance<EtaManager>();
+				this.etaManager.Config = new EtaConfig("192.168.178.35", 8080);
+			}
+			catch (Exception ex)
+			{
+				// Exception in Setup methods are not reported by Nunit and silently swallowed. Can be annoying. So let's log this.
+				Console.WriteLine(ex);
 
-			this.etaManager.Config = new EtaConfig("192.168.178.35", 8080);
+			}
+		}
+
+		[TestFixtureTearDown]
+		public void TearDown()
+		{
 		}
 
 		EtaManager etaManager;
@@ -51,12 +57,14 @@ namespace ETA.Tests
 			var msg = this.fixture.Create<string>();
 			var desc = this.fixture.Create<string>();
 			var time = this.fixture.Create<DateTime>();
+			var errorType = this.fixture.Create<EtaError.ERROR_TYPE>();
 
-			var testError = new EtaError(msg, desc, time);
+			var testError = new EtaError(msg, desc, time, errorType);
 
 			testError.Message.ShouldEqual(msg);
 			testError.Reason.ShouldEqual(desc);
 			testError.OccurredAt.ShouldEqual(time);
+			testError.ErrorType.ShouldEqual(errorType);
 		}
 
 		[Test]
@@ -65,9 +73,10 @@ namespace ETA.Tests
 			var msg = this.fixture.Create<string>();
 			var desc = this.fixture.Create<string>();
 			var time = this.fixture.Create<DateTime>();
+			var errorType = this.fixture.Create<EtaError.ERROR_TYPE>();
 
-			var testError = new EtaError(msg, desc, time);
-			var compareError = new EtaError(msg, desc, time);
+			var testError = new EtaError(msg, desc, time, errorType);
+			var compareError = new EtaError(msg, desc, time, errorType);
 
 			testError.ShouldEqual(compareError);
 		}
@@ -78,6 +87,7 @@ namespace ETA.Tests
 			var testError = this.fixture.Create<EtaError>();
 			var compareError = this.fixture.Create<EtaError>();
 
+			// Chances are low that fixture will create two identical objects :-)
 			testError.ShouldNotEqual(compareError);
 		}
 

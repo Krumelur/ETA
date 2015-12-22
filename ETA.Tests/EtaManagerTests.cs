@@ -6,8 +6,6 @@ using System.Threading;
 using Ploeh.AutoFixture;
 using Moq;
 using Should;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Ioc;
 
 namespace ETA.Tests
 {
@@ -20,22 +18,30 @@ namespace ETA.Tests
 		[TestFixtureSetUp]
 		public void Setup()
 		{
-			// Use AutoFixture to generate values.
-			this.fixture = new Fixture();
+			try
+			{
+				// Use AutoFixture to generate values.
+				this.fixture = new Fixture();
 
-			// Create mocks for our interfaces.
-			this.etaWebApiMock = new Mock<IEtaWebApi>();
-			this.loggerMock = new Mock<ILogger>();
+				// Create mocks for our interfaces.
+				this.etaWebApiMock = new Mock<IEtaWebApi>();
+				this.loggerMock = new Mock<ILogger>();
+				
+				this.etaManager = new EtaManager(this.etaWebApiMock.Object, this.loggerMock.Object);
 
-			// Register mocks as implementations for the interfaces in DI container.
-			SimpleIoc.Default.Register<IEtaWebApi>(() => this.etaWebApiMock.Object);
-			SimpleIoc.Default.Register<ILogger>(() => this.loggerMock.Object);
-			SimpleIoc.Default.Register<EtaManager>();
+				this.etaManager.Config = new EtaConfig("192.168.178.35", 8080);
+			}
+			catch (Exception ex)
+			{
+				// Exception in Setup methods are not reported by Nunit and silently swallowed. Can be annoying. So let's log this.
+				Console.WriteLine(ex);
 
-			// Create EtaManager through DI container to inject interface implementations.
-			this.etaManager = SimpleIoc.Default.GetInstance<EtaManager>();
+			}
+		}
 
-			this.etaManager.Config = new EtaConfig("192.168.178.35", 8080);
+		[TestFixtureTearDown]
+		public void TearDown()
+		{
 		}
 
 		EtaManager etaManager;
@@ -165,7 +171,7 @@ namespace ETA.Tests
 		}
 
 		[Test]
-		public async Task GetErrorsAsync_Should_Return_List_of_errors()
+		public async Task GetErrorsAsync_Should_Return_correct_amount_of_errors()
 		{
 			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
 			var xml =
@@ -175,6 +181,7 @@ namespace ETA.Tests
 						@"<fub uri=""/112/10021"" name=""Kessel"">" +
 							@"<error msg=""Flue gas sensor Interrupted"" priority=""Error"" time=""2011-06-29 12:47:50"">Sensor or Cable broken or badly connected</error>" +
 							@"<error msg=""Water pressure too low 0,00 bar"" priority=""Error"" time=""2011-06-29 12:48:12"">Top up heating water! If this warning occurs more than once a year, please contact plumber.</error>" +
+							@"<error msg=""Erinnerung Aschebox leeren 1000 kg"" priority=""Warnung"" time=""2015-12-21 07:00:00"">Die Verschlüsse an der Aschebox öffnen und diese vom Kessel abziehen und entleeren. Der Zählerstand [Verbrauch seit Aschebox leeren] wird beim Abnehmen der Aschebox automatisch auf Null zurückgesetzt.</error>" +
 						@"</fub>" +
 						@"<fub uri=""/112/10101"" name=""HK1""/>" +
 					@"</errors>" +
@@ -186,11 +193,35 @@ namespace ETA.Tests
 			// Call EtaManager method. EtaManager uses IEtaWebApi (passed in by DI Container) and will receive the XML specified in the mock. Magic.
 			var errors = await this.etaManager.GetErrorsAsync();
 
-			// Expecting two errors from the XML above.
-			errors.Count.ShouldEqual(2);
+			// Expecting three errors from the XML above.
+			errors.Count.ShouldEqual(3);
+		}
+
+		[Test]
+		public async Task GetErrorsAsync_Should_Return_correct_error_types()
+		{
+			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
+			var xml =
+				@"<?xml version=""1.0"" encoding=""utf - 8""?>" +
+				@"<eta version=""1.0"" xmlns=""http://www.eta.co.at/rest/v1"">" +
+				@"<errors uri=""/user/errors"">" +
+				@"<fub uri=""/112/10021"" name=""Kessel"">" +
+				@"<error msg=""Flue gas sensor Interrupted"" priority=""Error"" time=""2011-06-29 12:47:50"">Sensor or Cable broken or badly connected</error>" +
+				@"<error msg=""Erinnerung Aschebox leeren 1000 kg"" priority=""Warnung"" time=""2015-12-21 07:00:00"">Die Verschlüsse an der Aschebox öffnen und diese vom Kessel abziehen und entleeren. Der Zählerstand [Verbrauch seit Aschebox leeren] wird beim Abnehmen der Aschebox automatisch auf Null zurückgesetzt.</error>" +
+				@"</fub>" +
+				@"<fub uri=""/112/10101"" name=""HK1""/>" +
+				@"</errors>" +
+				@"</eta>";
+
+			// Make the mock return the XML from above.
+			this.etaWebApiMock.Setup(x => x.GetErrorsXmlAsync(CancellationToken.None)).ReturnsAsync(xml);
+
+			// Call EtaManager method. EtaManager uses IEtaWebApi (passed in by DI Container) and will receive the XML specified in the mock. Magic.
+			var errors = await this.etaManager.GetErrorsAsync();
 
 			// Expecting dates and message to be correct.
-			errors[0].ShouldEqual(new EtaError("Flue gas sensor Interrupted", "Sensor or Cable broken or badly connected", new DateTime(2011, 6, 29, 12, 47, 50)));
+			errors[0].ShouldEqual(new EtaError("Flue gas sensor Interrupted", "Sensor or Cable broken or badly connected", new DateTime(2011, 6, 29, 12, 47, 50), EtaError.ERROR_TYPE.Error));
+			errors[1].ShouldEqual(new EtaError("Erinnerung Aschebox leeren 1000 kg", "Die Verschlüsse an der Aschebox öffnen und diese vom Kessel abziehen und entleeren. Der Zählerstand [Verbrauch seit Aschebox leeren] wird beim Abnehmen der Aschebox automatisch auf Null zurückgesetzt.", new DateTime(2015, 12, 21, 7, 0, 0), EtaError.ERROR_TYPE.Warning));
 		}
 	}
 }

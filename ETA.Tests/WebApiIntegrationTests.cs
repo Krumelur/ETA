@@ -11,13 +11,22 @@ namespace ETA.Tests
 	/// Integration tests for accessing the ETA web api.
 	/// </summary>
 	[TestFixture]
-	public class ProductiveEtaWebApiTests
+	public class WebApiIntegrationTests
 	{
 		[TestFixtureSetUp]
 		public void Setup()
 		{
-			this.webApi = new EtaWebApi(null);
-			this.webApi.SetHostUrl("http://192.168.178.35:8080");
+			try
+			{
+				this.webApi = new EtaWebApi(null);
+				this.webApi.SetHostUrl("http://192.168.178.35:8080");
+			}
+			catch (Exception ex)
+			{
+				// Exception in Setup methods are not reported by Nunit and silently swallowed. Can be annoying. So let's log this.
+				Console.WriteLine(ex);
+
+			}
 		}
 
 		IEtaWebApi webApi;

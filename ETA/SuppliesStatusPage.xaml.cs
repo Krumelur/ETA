@@ -1,5 +1,4 @@
 ﻿using Xamarin.Forms;
-using ETA.Shared;
 
 namespace ETA
 {
@@ -7,7 +6,7 @@ namespace ETA
 	{
 		public SuppliesStatusPage()
 		{
-			InitializeComponent();
+			this.InitializeComponent();
 		}
 	}
 }

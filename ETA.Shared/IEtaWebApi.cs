@@ -83,6 +83,7 @@ namespace ETA.Shared
 		///			<fub uri="/112/10021" name="Kessel">
 		///				<error msg="Flue gas sensor Interrupted" priority="Error" time="2011-06-29 12:47:50">Sensor or Cable broken or badly connected</error>
 		///				<error msg="Water pressure too low 0,00 bar" priority="Error" time="2011-06-29 12:48:12">Top up heating water! If this warning occurs more than once a year, please contact plumber.</error>
+		///				<error msg="Erinnerung Aschebox leeren 1000 kg" priority="Warnung" time="2015-12-21 07:00:00">Die Verschlüsse an der Aschebox öffnen und diese vom Kessel abziehen und entleeren. Der Zählerstand [Verbrauch seit Aschebox leeren] wird beim Abnehmen der Aschebox automatisch auf Null zurückgesetzt.</error>
 		///			</fub>
 		///			<fub uri="/112/10101" name="HK1"/>
 		///		</errors>

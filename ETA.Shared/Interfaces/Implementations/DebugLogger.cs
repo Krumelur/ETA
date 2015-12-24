@@ -3,6 +3,9 @@ using System.Diagnostics;
 
 namespace ETA.Shared
 {
+	/// <summary>
+	/// Simple logger implementation that uses Debug.WriteLine().
+	/// </summary>
 	internal class DebugLogger : ILogger
 	{
 		public void Log(Exception ex)

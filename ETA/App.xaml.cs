@@ -7,12 +7,13 @@ using System;
 
 namespace ETA
 {
-
 	public partial class App : Application
 	{
-		public App ()
+		public App (string databasePath)
 		{
 			this.InitializeComponent();
+
+			ViewModelLocator.DatabasePath = databasePath;
 
 			var suppliesPage = new SuppliesStatusPage();
 

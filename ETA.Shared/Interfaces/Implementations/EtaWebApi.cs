@@ -21,8 +21,6 @@ namespace ETA.Shared
 			this.logger = logger;
 		}
 
-
-
 		string hostUrl;
 		ILogger logger;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Foundation;
@@ -17,9 +18,11 @@ namespace ETA.iOS
 			// Code for starting up the Xamarin Test Cloud Agent
 			#if ENABLE_TEST_CLOUD
 			Xamarin.Calabash.Start();
-			#endif
+#endif
 
-			LoadApplication (new App ());
+			var databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..", "Library", "etadata", "db.sqlite");
+			Console.WriteLine($"iOS database location: {databasePath}");
+			LoadApplication (new App (databasePath));
 
 			/*
 			UITabBar.Appearance.BarTintColor = UIColor.Black;

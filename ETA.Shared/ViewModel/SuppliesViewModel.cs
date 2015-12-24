@@ -2,6 +2,7 @@ using GalaSoft.MvvmLight;
 using System.Diagnostics;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using System;
 
 namespace ETA.Shared
 {
@@ -13,6 +14,7 @@ namespace ETA.Shared
 		public SuppliesViewModel (EtaManager manager) : base (manager)
 		{
 		}
+
 
 		public ICommand UpdateSuppliesInfoCommand
 		{

@@ -26,8 +26,10 @@ namespace ETA.Tests
 				// Create mocks for our interfaces.
 				this.etaWebApiMock = new Mock<IEtaWebApi>();
 				this.loggerMock = new Mock<ILogger>();
+				this.storageMock = new Mock<IStorage>();
+				this.supplyDataCreatorMock = new Mock<Func<ISupplyData>>();
 
-				this.etaManager = new EtaManager(this.etaWebApiMock.Object, this.loggerMock.Object);
+				this.etaManager = new EtaManager(this.etaWebApiMock.Object, this.loggerMock.Object, storageMock.Object, supplyDataCreatorMock.Object);
 
 				this.etaManager.Config = new EtaConfig("192.168.178.35", 8080);
 			}
@@ -48,6 +50,8 @@ namespace ETA.Tests
 		IFixture fixture;
 		Mock<IEtaWebApi> etaWebApiMock;
 		Mock<ILogger> loggerMock;
+		Mock<IStorage> storageMock;
+		Mock<Func<ISupplyData>> supplyDataCreatorMock;
 
 		public IEtaWebApi WebApi => this.etaWebApiMock.Object;
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,10 +28,10 @@ namespace ETA.Shared
 		/// <returns></returns>
 		Task SetConfigValueAsync(string key, string value);
 
-		Task SaveSupplyDataAsync(SupplyData supplyData);
+		Task<ISupplyData> SaveSupplyDataAsync(ISupplyData supplyData);
 
-		Task<SupplyData> GetSupplyDataAsync(int id);
+		Task<ISupplyData> GetSupplyDataAsync(int id);
 
-		Task<List<SupplyData>> GetSupplyDataAsync(Func<SupplyData, bool> filter);
+		Task<IList<ISupplyData>> GetSupplyDataAsync(Expression<Func<ISupplyData, bool>> filter);
 	}
 }

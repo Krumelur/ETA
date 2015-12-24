@@ -18,12 +18,17 @@ namespace ETA.Shared
 		/// </summary>
 		/// <param name="webApi">implementation to use for server communication</param>
 		/// <param name="logger">logger to use</param>
-		public EtaManager(IEtaWebApi webApi, ILogger logger)
+		public EtaManager(IEtaWebApi webApi, ILogger logger, IStorage storage, Func<ISupplyData> supplyDataCreator)
 		{
 			this.webApi = webApi;
 			this.Logger = logger;
+			this.storage = storage;
+			this.supplyDataCreator = supplyDataCreator;
 		}
+
 		IEtaWebApi webApi;
+		readonly IStorage storage;
+		readonly Func<ISupplyData> supplyDataCreator;
 
 		/// <summary>
 		/// Used for log output.By default this logs to the debug console but you can set your own logger.
@@ -136,14 +141,38 @@ namespace ETA.Shared
 
 			try
 			{
-				var value = this.GetContentElement(xmlResponse, "value").Attribute("strValue").Value;
+				var value = Convert.ToDouble(this.GetContentElement(xmlResponse, "value").Value);
+				var divider = Convert.ToDouble(this.GetContentElement(xmlResponse, "value").Attribute("scaleFactor").Value);
 				var unit= this.GetContentElement(xmlResponse, "value").Attribute("unit").Value;
 
-				amount = new NumericUnit(Convert.ToDouble(value), unit);
+				amount = new NumericUnit(value / divider, unit);
 			}
 			catch (Exception ex)
 			{
 				this.Logger?.Log(ex);
+			}
+
+			if (amount != NumericUnit.Empty)
+			{
+				// Check if there is a value that's younger than 12 hours. If yes, update it. 
+				// If not, create a new entry.
+				var halfDayAgo = DateTime.Now - TimeSpan.FromHours(12);
+				var existingEntries = await this.storage.GetSupplyDataAsync(x => x.TimeStamp < halfDayAgo).ConfigureAwait(false);
+				ISupplyData data = existingEntries?.FirstOrDefault();
+				if (data == null)
+				{
+					this.Logger?.Log("No existing value found - createing new supply data entry.");
+					data = this?.supplyDataCreator();
+				}
+				// Store retrieved value in local DB.
+				if (data != null)
+				{
+					data.Amount = amount.Value;
+					data.Unit = amount.Unit;
+					data.TimeStamp = DateTime.Now;
+
+					await this.storage.SaveSupplyDataAsync(data);
+				}
 			}
 
 			return amount;
@@ -161,10 +190,11 @@ namespace ETA.Shared
 
 			try
 			{
-				var value = this.GetContentElement(xmlResponse, "value").Attribute("strValue").Value;
+				var value = Convert.ToDouble(this.GetContentElement(xmlResponse, "value").Value);
+				var divider = Convert.ToDouble(this.GetContentElement(xmlResponse, "value").Attribute("scaleFactor").Value);
 				var unit = this.GetContentElement(xmlResponse, "value").Attribute("unit").Value;
 
-				amount = new NumericUnit(Convert.ToDouble(value), unit);
+				amount = new NumericUnit(value / divider, unit);
 			}
 			catch (Exception ex)
 			{

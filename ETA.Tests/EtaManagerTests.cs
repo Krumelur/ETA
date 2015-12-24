@@ -20,14 +20,14 @@ namespace ETA.Tests
 		{
 			try
 			{
-				// Use AutoFixture to generate values.
-				this.fixture = new Fixture();
-
 				// Create mocks for our interfaces.
 				this.etaWebApiMock = new Mock<IEtaWebApi>();
 				this.loggerMock = new Mock<ILogger>();
-				
-				this.etaManager = new EtaManager(this.etaWebApiMock.Object, this.loggerMock.Object);
+
+				this.storageMock = new Mock<IStorage>();
+
+				var fixture = new Fixture();
+				this.etaManager = new EtaManager(this.etaWebApiMock.Object, this.loggerMock.Object, storageMock.Object, () => new SupplyData());
 
 				this.etaManager.Config = new EtaConfig("192.168.178.35", 8080);
 			}
@@ -45,18 +45,19 @@ namespace ETA.Tests
 		}
 
 		EtaManager etaManager;
-		IFixture fixture;
 		Mock<IEtaWebApi> etaWebApiMock;
 		Mock<ILogger> loggerMock;
+		Mock<IStorage> storageMock;
 
 		public IEtaWebApi WebApi => this.etaWebApiMock.Object;
 
 		[Test]
-		public async Task GetApiVersionAsync_Should_Return_Valid_Version()
+		public async Task EtaManager_GetApiVersionAsync_Should_Return_Valid_Version()
 		{
 			// Create a random version so we're not always testing agsinst the same hardcoded string.
 			// This will generate a random string.
-			var expectedApiVersion = this.fixture.Create<string>();
+			var fixture = new Fixture();
+			var expectedApiVersion = fixture.Create<string>();
 
 			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
 			var xml = 
@@ -76,7 +77,7 @@ namespace ETA.Tests
 		}
 
 		[Test]
-		public async Task GetApiVersionAsync_Should_Return_NULL_for_invalid_XML()
+		public async Task EtaManager_GetApiVersionAsync_Should_Return_NULL_for_invalid_XML()
 		{
 			var expectedApiVersion = "some invalid xml string";
 			this.etaWebApiMock.Setup(x => x.GetApiVersionXmlAsync(CancellationToken.None)).ReturnsAsync(expectedApiVersion);
@@ -86,16 +87,20 @@ namespace ETA.Tests
 		}
 
 		[Test]
-		public async Task GetSuppliesXmlAsync_Should_Return_Valid_Amount()
+		public async Task EtaManager_GetSuppliesAsync_Should_Return_Valid_Amount()
 		{
+			var fixture = new Fixture();
 			// Create a random value so we're not always testing agsinst the same hardcoded value.
-			var expectedSuppliesAmount = this.fixture.Create<NumericUnit>();
+			var expectedSuppliesAmount = fixture.Create<NumericUnit>();
+			fixture.Customizations.Add(new RandomNumericSequenceGenerator(10, 100));
+			var scaleFactor = fixture.Create<int>();
+			fixture.Customizations.Clear();
 
 			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
 			var xml =
 				@"<?xml version=""1.0"" encoding=""utf - 8""?>" +
 				@"<eta version=""1.0"" xmlns=""http://www.eta.co.at/rest/v1"">" +
-					@"<value uri=""/user/var/112/10201/0/0/12015"" strValue=""" + expectedSuppliesAmount.Value + @""" unit=""" + expectedSuppliesAmount.Unit + @""" decPlaces=""0"" scaleFactor=""10"" advTextOffset=""0"">" + expectedSuppliesAmount.Value + "</value>" +
+					@"<value uri=""/user/var/112/10201/0/0/12015"" strValue=""" + expectedSuppliesAmount.Value + @""" unit=""" + expectedSuppliesAmount.Unit + @""" decPlaces=""0"" scaleFactor=""" + scaleFactor + @""" advTextOffset=""0"">" + expectedSuppliesAmount.Value*scaleFactor + "</value>" +
 				@"</eta>";
 
 			// Make the mock return the XML from above.
@@ -109,7 +114,37 @@ namespace ETA.Tests
 		}
 
 		[Test]
-		public async Task GetSuppliesXmlAsync_Should_Return_Empty_Amount_for_invalid_XML()
+		public async Task EtaManager_GetSuppliesAsync_Should_save_value_to_storage()
+		{
+			var fixture = new Fixture();
+			// Create a random value so we're not always testing agsinst the same hardcoded value.
+			var expectedSuppliesAmount = fixture.Create<NumericUnit>();
+			fixture.Customizations.Add(new RandomNumericSequenceGenerator(10, 100));
+			var scaleFactor = fixture.Create<int>();
+			fixture.Customizations.Clear();
+
+			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
+			var xml =
+				@"<?xml version=""1.0"" encoding=""utf - 8""?>" +
+				@"<eta version=""1.0"" xmlns=""http://www.eta.co.at/rest/v1"">" +
+					@"<value uri=""/user/var/112/10201/0/0/12015"" strValue=""" + expectedSuppliesAmount.Value + @""" unit=""" + expectedSuppliesAmount.Unit + @""" decPlaces=""0"" scaleFactor=""" + scaleFactor + @""" advTextOffset=""0"">" + expectedSuppliesAmount.Value * scaleFactor + "</value>" +
+				@"</eta>";
+
+			// Make the mock return the XML from above.
+			this.etaWebApiMock.Setup(x => x.GetSuppliesXmlAsync(CancellationToken.None)).ReturnsAsync(xml);
+
+			// If not reset, SaveSupplyDataAsync() might be called more than once because it is also called as part of other tests.
+			this.storageMock.ResetCalls();
+
+			// Call EtaManager method. EtaManager uses IEtaWebApi (passed in by DI Container) and will receive the XML specified in the mock. Magic.
+			var amount = await this.etaManager.GetSuppliesAsync();
+
+			// We want to see that the parsed data gets saved to the DB.
+			this.storageMock.Verify(x => x.SaveSupplyDataAsync(It.IsNotNull<ISupplyData>()), Times.Once);
+		}
+
+		[Test]
+		public async Task EtaManager_GetSuppliesAsync_Should_Return_Empty_Amount_for_invalid_XML()
 		{
 			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
 			var xml = "<xml>some invalid xml</xml>";
@@ -125,16 +160,20 @@ namespace ETA.Tests
 		}
 
 		[Test]
-		public async Task GetStockContentWarningLevelAsync_Should_Return_Valid_Amount()
+		public async Task EtaManager_GetSuppliesWarningLevelAsync_Should_Return_Valid_Amount()
 		{
+			var fixture = new Fixture();
 			// Create a random value so we're not always testing agsinst the same hardcoded value.
-			var expectedSuppliesWarningLevelAmount = this.fixture.Create<NumericUnit>();
+			var expectedSuppliesWarningLevelAmount = fixture.Create<NumericUnit>();
+			fixture.Customizations.Add(new RandomNumericSequenceGenerator(10, 100));
+			var scaleFactor = fixture.Create<int>();
+			fixture.Customizations.Clear();
 
 			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
 			var xml =
 				@"<?xml version=""1.0"" encoding=""utf - 8""?>" +
 				@"<eta version=""1.0"" xmlns=""http://www.eta.co.at/rest/v1"">" +
-					@"<value uri=""/user/var/112/10201/0/0/12042"" strValue=""" + expectedSuppliesWarningLevelAmount.Value + @""" unit=""" + expectedSuppliesWarningLevelAmount.Unit + @""" decPlaces=""0"" scaleFactor=""10"" advTextOffset=""0"">" + expectedSuppliesWarningLevelAmount.Value + "</value>" +
+					@"<value uri=""/user/var/112/10201/0/0/12042"" strValue=""" + expectedSuppliesWarningLevelAmount.Value + @""" unit=""" + expectedSuppliesWarningLevelAmount.Unit + @""" decPlaces=""0"" scaleFactor=""" + scaleFactor + @""" advTextOffset=""0"">" + expectedSuppliesWarningLevelAmount.Value * scaleFactor + "</value>" +
 				@"</eta>";
 
 			// Make the mock return the XML from above.
@@ -148,10 +187,11 @@ namespace ETA.Tests
 		}
 
 		[Test]
-		public async Task GetTotalConsumptionAsync_Should_Return_Valid_Amount()
+		public async Task EtaManager_GetTotalConsumptionAsync_Should_Return_Valid_Amount()
 		{
+			var fixture = new Fixture();
 			// Create a random value so we're not always testing agsinst the same hardcoded value.
-			var expectedConsumption = this.fixture.Create<NumericUnit>();
+			var expectedConsumption = fixture.Create<NumericUnit>();
 
 			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
 			var xml =
@@ -171,7 +211,7 @@ namespace ETA.Tests
 		}
 
 		[Test]
-		public async Task GetErrorsAsync_Should_Return_correct_amount_of_errors()
+		public async Task EtaManager_GetErrorsAsync_Should_Return_correct_amount_of_errors()
 		{
 			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
 			var xml =
@@ -198,7 +238,7 @@ namespace ETA.Tests
 		}
 
 		[Test]
-		public async Task GetErrorsAsync_Should_Return_correct_error_types()
+		public async Task EtaManager_GetErrorsAsync_Should_Return_correct_error_types()
 		{
 			// Create some valid XML for the EtaManager to parse when calling the IEtaWebApi methods.
 			var xml =

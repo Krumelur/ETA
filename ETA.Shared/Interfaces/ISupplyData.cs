@@ -2,7 +2,7 @@
 
 namespace ETA.Shared
 {
-	public class SupplyData
+	public interface ISupplyData
 	{
 		int Id { get; set; }
 

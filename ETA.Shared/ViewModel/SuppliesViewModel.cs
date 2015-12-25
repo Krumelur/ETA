@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using System;
+using System.Threading;
 
 namespace ETA.Shared
 {
@@ -11,7 +12,7 @@ namespace ETA.Shared
 	/// </summary>
 	public class SuppliesViewModel : BaseViewModel
 	{
-		public SuppliesViewModel (EtaManager manager) : base (manager)
+		public SuppliesViewModel (EtaManager manager, IUIService uiService) : base (manager, uiService)
 		{
 		}
 
@@ -20,14 +21,21 @@ namespace ETA.Shared
 		{
 			get
 			{
+				this.cts = new CancellationTokenSource();
 				return new RelayCommand(async () => {
-					this.supplies = await this.Manager.GetSuppliesAsync();
+					// Get current supplies in storage.
+					this.supplies = await this.Manager.GetSuppliesAsync(cts.Token);
+					
+					// Update the current warning level setting.
+					this.suppliesWarningLevel = await this.Manager.GetSuppliesWarningLevelAsync(cts.Token);
+
 					this.RaisePropertyChanged(nameof(SuppliesDisplayValue));
 				}, () => true);
 			}
 		}
 
 		NumericUnit supplies;
+		NumericUnit suppliesWarningLevel;
 
 		/// <summary>
 		/// Defines the filling of the supplies storage in percent. Changing this value will also change SuppliesFillAbsoluteValue.

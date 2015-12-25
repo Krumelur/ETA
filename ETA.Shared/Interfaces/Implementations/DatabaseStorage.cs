@@ -86,10 +86,9 @@ namespace ETA.Shared
 				return;
 			}
 
-			Debug.Assert(!string.IsNullOrWhiteSpace(this.DatabasePath));
-
 			if (this.connection == null)
 			{
+				Debug.Assert(!string.IsNullOrWhiteSpace(this.DatabasePath));
 				this.connection = new SQLiteAsyncConnection(this.DatabasePath);
 			}
 

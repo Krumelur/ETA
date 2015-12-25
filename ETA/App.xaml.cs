@@ -1,26 +1,39 @@
 ﻿using ETA.Shared;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-using System;
 
-[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+//[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
 namespace ETA
 {
 	public partial class App : Application
 	{
-		public App (string databasePath)
+		public App (string databasePath, IPlatformServices platformServices)
 		{
 			this.InitializeComponent();
 
-			ViewModelLocator.DatabasePath = databasePath;
+			var uiService = new FormsUIService();
 
-			var suppliesPage = new SuppliesStatusPage();
-
+			// Make view model locator globally available as a resource.
+			this.Resources.Add("Locator", new ViewModelLocator(databasePath, uiService, platformServices));
+			
 			var tabbedPage = new TabbedPage();
-			tabbedPage.Children.Add(new NavigationPage(suppliesPage) { Title = suppliesPage.Title, Icon = suppliesPage.Icon });
+			
+			tabbedPage.Children.Add(this.WrapInNavPage(new SuppliesStatusPage()));
+			tabbedPage.Children.Add(this.WrapInNavPage(new SettingsPage()));
 
 			this.MainPage = tabbedPage;
+		}
+
+		NavigationPage WrapInNavPage(ContentPage page)
+		{
+			var navBarBackgroundColor = (Color)this.Resources["NavBarBkColor"];
+			var navBarTextColor = (Color)this.Resources["NavBarTextColor"];
+			return new NavigationPage(page) {
+				Title = page.Title,
+				Icon = page.Icon,
+				BarBackgroundColor = navBarBackgroundColor,
+				BarTextColor = navBarTextColor
+			};
 		}
 
 		protected override void OnStart ()

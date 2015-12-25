@@ -1,13 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ContentPage Title="Vorrat" Icon="wood.png" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:ETA;assembly=ETA" x:Class="ETA.SuppliesStatusPage"
-BackgroundImage="wood_background.jpg"
-BindingContext="{Binding Supplies, Source={StaticResource Locator}}">
+<ContentPage
+	Title="Vorrat"
+	Icon="wood.png"
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:ETA;assembly=ETA"
+	x:Class="ETA.SuppliesStatusPage"
+	BackgroundColor="{StaticResource ContentPageBkColor}"
+	BindingContext="{Binding Supplies, Source={StaticResource Locator}}">
 
 	<ContentPage.Resources>
 		<ResourceDictionary>
 			<Style x:Key="PercentageIndexStyle" TargetType="Label">
 				<Setter Property="Font" Value="Bold,15"/>
-				<Setter Property="TextColor" Value="Black"/>
+				<Setter Property="TextColor" Value="#202020"/>
 				<Setter Property="BackgroundColor" Value="{x:Static local:StaticUI.PercentageLabelBackgroundColor}"/>
 				<Setter Property="HorizontalTextAlignment" Value="Center"/>
 			</Style>
@@ -16,7 +22,9 @@ BindingContext="{Binding Supplies, Source={StaticResource Locator}}">
 				<Setter Property="Font" Value="Bold,60"/>
 				<Setter Property="TextColor" Value="Black"/>
 				<Setter Property="HorizontalTextAlignment" Value="Center"/>
+				<!--
 				<Setter Property="BackgroundColor" Value="{x:Static local:StaticUI.PercentageLabelBackgroundColor}"/>
+				-->
 			</Style>
 		</ResourceDictionary>
 	</ContentPage.Resources>
@@ -25,27 +33,47 @@ BindingContext="{Binding Supplies, Source={StaticResource Locator}}">
 		<ToolbarItem Name="Refresh" Command="{Binding UpdateSuppliesInfoCommand}"/>
 	</ContentPage.ToolbarItems>
 
-	<AbsoluteLayout HorizontalOptions="Fill" VerticalOptions="Fill" x:Name="absoluteLayout" Height="{Binding SuppliesFillReferenceValue, Mode=OneWayToSource}"	>
+	<Grid>
+		<!--
+		The grid's only purpose is to make some space for the label which gets displayed at the current fill level.
+		-->
+		<Grid.RowDefinitions>
+			<RowDefinition Height="50"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
 
-		<!-- Overlay image which indicates the remaining supplies -->
-		<Image Source="pellets_foreground.png" Aspect="AspectFill" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" TranslationY="{Binding SuppliesFillAbsoluteValue, Mode=OneWay}" />
+		<AbsoluteLayout Grid.Row="1" HorizontalOptions="Fill" VerticalOptions="Fill" x:Name="absoluteLayout" Height="{Binding SuppliesFillReferenceValue, Mode=OneWayToSource}">
 
-		<!-- Percentage indicator at left border -->
-		<Label Text="100%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.05, 50, -1"/>
-		<Label Text="90%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.15, 50, -1"/>
-		<Label Text="80%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.25, 50, -1"/>
-		<Label Text="70%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.35, 50, -1"/>
-		<Label Text="60%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.45, 50, -1"/>
-		<Label Text="50%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.55, 50, -1"/>
-		<Label Text="40%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.65, 50, -1"/>
-		<Label Text="30%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.75, 50, -1"/>
-		<Label Text="20%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.85, 50, -1"/>
-		<Label Text="10%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.95, 50, -1"/>
+			<!-- Overlay image which indicates the remaining supplies -->
+			<Image Source="pellets_foreground.png" Aspect="AspectFill" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" TranslationY="{Binding SuppliesFillAbsoluteValue, Mode=OneWay}" />
 
-		<Label Text="{Binding SuppliesDisplayValue}" Style="{StaticResource SuppliesDisplayStyle}" AbsoluteLayout.LayoutFlags="XProportional,YProportional" AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1" AnchorX="0.5"/>
+			<!-- Percentage indicator at left border -->
+			<Label Text="100%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.0, 50, -1" AnchorY="0.5"/>
+			<Label Text="90%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.1, 50, -1" AnchorY="0.5"/>
+			<Label Text="80%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.2, 50, -1" AnchorY="0.5"/>
+			<Label Text="70%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.3, 50, -1" AnchorY="0.5"/>
+			<Label Text="60%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.4, 50, -1" AnchorY="0.5"/>
+			<Label Text="50%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.5, 50, -1" AnchorY="0.5"/>
+			<Label Text="40%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.6, 50, -1" AnchorY="0.5"/>
+			<Label Text="30%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.7, 50, -1" AnchorY="0.5"/>
+			<Label Text="20%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.8, 50, -1" AnchorY="0.5"/>
+			<Label Text="10%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 0.9, 50, -1" AnchorY="0.5"/>
+			<Label Text="0%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 1.0, 50, -1" AnchorY="0.5"/>
 
-		<StackLayout AbsoluteLayout.LayoutBounds="0, 1, 1, 1" AbsoluteLayout.LayoutFlags="All">
-			<Slider Minimum="0" Maximum="1" Value="{Binding SuppliesFillPercentage, Mode=TwoWay}" />
-		</StackLayout>
-	</AbsoluteLayout>
+			<Label
+				Text="{Binding SuppliesDisplayValue}"
+				Style="{StaticResource SuppliesDisplayStyle}"
+				AbsoluteLayout.LayoutFlags="XProportional"
+				AbsoluteLayout.LayoutBounds="0.5, -30, -1, -1"
+				AnchorX="0.5"
+				AnchorY="0"
+				TranslationY="{Binding SuppliesFillAbsoluteValue, Mode=OneWay}"/>
+
+			<!--
+			<StackLayout AbsoluteLayout.LayoutBounds="0, 1, 1, 1" AbsoluteLayout.LayoutFlags="All">
+				<Slider Minimum="0" Maximum="1" Value="{Binding SuppliesFillPercentage, Mode=TwoWay}" />
+			</StackLayout>
+			-->
+		</AbsoluteLayout>
+	</Grid>
 </ContentPage>

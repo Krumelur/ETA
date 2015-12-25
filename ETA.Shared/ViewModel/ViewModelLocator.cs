@@ -10,7 +10,6 @@
 */
 
 using System;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 
@@ -23,18 +22,15 @@ namespace ETA.Shared
 	public class ViewModelLocator
 	{
 		/// <summary>
-		/// Path to local database. Must be set by the platforms.
-		/// </summary>
-		public static string DatabasePath { get; set; }
-
-		/// <summary>
 		/// Initializes a new instance of the ViewModelLocator class.
 		/// </summary>
-		public ViewModelLocator ()
+		public ViewModelLocator (string databasePath, IUIService uiService, IPlatformServices platformServices)
 		{
 			ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
 			// Support classes.
+			SimpleIoc.Default.Register<IUIService>(() => uiService);
+			SimpleIoc.Default.Register<IPlatformServices>(() => platformServices);
 			SimpleIoc.Default.Register<IEtaWebApi, EtaWebApi>();
 			SimpleIoc.Default.Register<ILogger, DebugLogger>();
 			SimpleIoc.Default.Register<IStorage, DatabaseStorage>();
@@ -44,10 +40,11 @@ namespace ETA.Shared
 			SimpleIoc.Default.Register<EtaManager>();
 
 			var dbStorage = (DatabaseStorage)SimpleIoc.Default.GetInstance<IStorage>();
-			dbStorage.DatabasePath = ViewModelLocator.DatabasePath;
+			dbStorage.DatabasePath = databasePath;
 
 			// View Models.
 			SimpleIoc.Default.Register<SuppliesViewModel> ();
+			SimpleIoc.Default.Register<SettingsViewModel>();
 		}
 
 		
@@ -56,6 +53,14 @@ namespace ETA.Shared
 		{
 			get {
 				return ServiceLocator.Current.GetInstance<SuppliesViewModel> ();
+			}
+		}
+
+		public SettingsViewModel Settings
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<SettingsViewModel>();
 			}
 		}
 

@@ -157,11 +157,11 @@ namespace ETA.Shared
 				// Check if there is a value that's younger than 12 hours. If yes, update it. 
 				// If not, create a new entry.
 				var halfDayAgo = DateTime.Now - TimeSpan.FromHours(12);
-				var existingEntries = await this.storage.GetSupplyDataAsync(x => x.TimeStamp < halfDayAgo).ConfigureAwait(false);
+				var existingEntries = await this.storage.GetSupplyDataAsync(x => x.TimeStamp >= halfDayAgo).ConfigureAwait(false);
 				ISupplyData data = existingEntries?.FirstOrDefault();
 				if (data == null)
 				{
-					this.Logger?.Log("No existing value found - createing new supply data entry.");
+					this.Logger?.Log("No existing value found - creating new supply data entry.");
 					data = this?.supplyDataCreator();
 				}
 				// Store retrieved value in local DB.

@@ -21,7 +21,7 @@
 	<StackLayout Padding="10">
 		<Label Text="Maximalkapazität Lager (kg)"/>
 		<Picker
-			local:PickerCollection.Items="{Binding StorageChoices}"
+			local:PickerCollection.Items="{Binding FormattedStorageChoices}"
             SelectedIndex="{Binding StorageCapacitySelectedIndex, Mode=TwoWay}"/>
 
 		<Label Text="Warngrenze (kg)"/>
@@ -38,14 +38,14 @@
 				Grid.Column="0"
 				HorizontalOptions="FillAndExpand"
 				VerticalOptions="Center"
-				local:PickerCollection.Items="{Binding StorageChoices}"
+				local:PickerCollection.Items="{Binding FormattedStorageChoices}"
                 SelectedIndex="{Binding StorageWarningLevelSelectedIndex, Mode=TwoWay}"/>
 			<Button Grid.Column="1" Image="refresh.png" HorizontalOptions="End" Command="{Binding RefreshWarningLevelCommand}"/>
 		</Grid>
 
 		<Label Text="URL/IP Heizkessel"/>
 		<Entry x:Name="UrlEntry" Placeholder="192.168.178:8080" Keyboard="Url" Text="{Binding Url}"/>
-		<Button Text="Verbindung testen" IsEnabled="True" Command="{Binding TestConnectionCommand}">
+		<Button Text="Verbindung speichern" IsEnabled="True" Command="{Binding TestConnectionCommand}">
 			<Button.Triggers>
 				<DataTrigger TargetType="Button" Binding="{Binding Source={x:Reference UrlEntry}, Path=Text.Length}" Value="0">
 					<Setter Property="IsEnabled" Value="False"/>

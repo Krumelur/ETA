@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using ETA.Shared;
+using EtaShared;
 using GalaSoft.MvvmLight.Ioc;
 using Xamarin.Forms;
 
@@ -14,23 +14,16 @@ namespace ETA
 		{
 		}
 
-		public async Task ShowBusyIndicatorAsync(string msg, string cancel, CancellationTokenSource cts = default(CancellationTokenSource))
+		public CancellationToken ShowBusyIndicator(string msg, string cancel)
 		{
-			Debug.Assert(!Application.Current.MainPage.IsBusy);
-
 			Application.Current.MainPage.IsBusy = true;
 			var platform = SimpleIoc.Default.GetInstance<IPlatformServices>();
-			bool cancelled = await platform.ShowProgressIndicatorAsync(msg, cancel);
-			if (cancelled)
-			{
-				cts.Cancel();
-			}
+			var token = platform.ShowProgressIndicator(msg, cancel);
+			return token;
 		}
 
 		public void HideBusyIndicator()
 		{
-			Debug.Assert(Application.Current.MainPage.IsBusy);
-
 			Application.Current.MainPage.IsBusy = false;
 			var platform = SimpleIoc.Default.GetInstance<IPlatformServices>();
 			platform.DismissProgressIndicator();
@@ -38,7 +31,7 @@ namespace ETA
 
 		public Task ShowMessageAsync(string msg, string confirmButton)
 		{
-			return Application.Current.MainPage.DisplayAlert(string.Empty, msg, confirmButton, null);
+			return Application.Current.MainPage.DisplayAlert(string.Empty, msg, null, confirmButton);
 		}
 	}
 }

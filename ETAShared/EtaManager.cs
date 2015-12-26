@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using System.Linq;
 
-namespace ETA.Shared
+namespace EtaShared
 {
 	/// <summary>
 	/// High level access to the ETA services.
@@ -113,12 +113,12 @@ namespace ETA.Shared
 			{
 				return null;
 			}
-
-			string xmlResponse = await this.webApi.GetApiVersionXmlAsync(token).ConfigureAwait(false);
+			
 			string apiVersion = null;
 
 			try
 			{
+				string xmlResponse = await this.webApi.GetApiVersionXmlAsync(token).ConfigureAwait(false);
 				apiVersion = this.GetContentElement(xmlResponse, "api").Attribute("version").Value;
 			}
 			catch (Exception ex)
@@ -135,12 +135,13 @@ namespace ETA.Shared
 			{
 				return NumericUnit.Empty;
 			}
-
-			string xmlResponse = await this.webApi.GetSuppliesXmlAsync(token).ConfigureAwait(false);
+			
 			NumericUnit amount = NumericUnit.Empty;
 
 			try
 			{
+				string xmlResponse = await this.webApi.GetSuppliesXmlAsync(token).ConfigureAwait(false);
+
 				var value = Convert.ToDouble(this.GetContentElement(xmlResponse, "value").Value);
 				var divider = Convert.ToDouble(this.GetContentElement(xmlResponse, "value").Attribute("scaleFactor").Value);
 				var unit= this.GetContentElement(xmlResponse, "value").Attribute("unit").Value;
@@ -185,11 +186,12 @@ namespace ETA.Shared
 				return NumericUnit.Empty;
 			}
 
-			string xmlResponse = await this.webApi.GetSuppliesWarningLevelXml(token).ConfigureAwait(false);
 			NumericUnit amount = NumericUnit.Empty;
 
 			try
 			{
+				string xmlResponse = await this.webApi.GetSuppliesWarningLevelXml(token).ConfigureAwait(false);
+
 				var value = Convert.ToDouble(this.GetContentElement(xmlResponse, "value").Value);
 				var divider = Convert.ToDouble(this.GetContentElement(xmlResponse, "value").Attribute("scaleFactor").Value);
 				var unit = this.GetContentElement(xmlResponse, "value").Attribute("unit").Value;
@@ -211,11 +213,12 @@ namespace ETA.Shared
 				return NumericUnit.Empty;
 			}
 
-			string xmlResponse = await this.webApi.GetTotalConsumptionXmlAsync(token).ConfigureAwait(false);
 			NumericUnit amount = NumericUnit.Empty;
 
 			try
 			{
+				string xmlResponse = await this.webApi.GetTotalConsumptionXmlAsync(token).ConfigureAwait(false);
+
 				var value = this.GetContentElement(xmlResponse, "value").Attribute("strValue").Value;
 				var unit = this.GetContentElement(xmlResponse, "value").Attribute("unit").Value;
 
@@ -236,12 +239,12 @@ namespace ETA.Shared
 				return null;
 			}
 
-			string xmlResponse = await this.webApi.GetErrorsXmlAsync(token).ConfigureAwait(false);
-
 			List<EtaError> errors = new List<EtaError>();
 
 			try
 			{
+				string xmlResponse = await this.webApi.GetErrorsXmlAsync(token).ConfigureAwait(false);
+
 				foreach (var errorEl in this.GetContentElements(xmlResponse, "error", true))
 				{
 					var msg = errorEl.Attribute("msg").Value;

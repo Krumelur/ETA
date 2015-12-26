@@ -1,6 +1,6 @@
 using System;
 
-namespace ETA.Shared
+namespace EtaShared
 {
 	/// <summary>
 	/// Interface for logging purposes.

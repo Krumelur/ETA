@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace ETA.Shared
+namespace EtaShared
 {
 	/// <summary>
 	/// Configuration information.
@@ -28,9 +28,11 @@ namespace ETA.Shared
 				this.host = value;
 				if(this.host != null)
 				{
+					/*
 					this.host.Trim();
 					this.host = this.host.Replace("https:", "");
 					this.host = this.host.Replace("http:", "");
+					*/
 					this.host = this.host.Trim().Trim('/');
 				}
 			}
@@ -60,11 +62,11 @@ namespace ETA.Shared
 
 				if(this.Port > 0)
 				{
-					return $"http://{this.Host}:{this.Port}";
+					return $"{this.Host}:{this.Port}";
 				}
 				else
 				{
-					return $"http://{this.Host}";
+					return this.Host;
 				}
 			}
 		}

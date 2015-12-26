@@ -114,9 +114,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ETA.Shared\ETA.Shared.csproj">
+    <ProjectReference Include="..\ETAShared\EtaShared.csproj">
       <Project>{bff8a6fe-174c-4e09-9e4f-bfe2c108e044}</Project>
-      <Name>ETA.Shared</Name>
+      <Name>EtaShared</Name>
     </ProjectReference>
     <ProjectReference Include="..\ETA\ETA.Forms.csproj">
       <Project>{F83EC68A-99BB-4A2D-AD35-1CDF90E52C76}</Project>

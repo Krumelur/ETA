@@ -4,34 +4,43 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using BigTed;
-using ETA.Shared;
+using EtaShared;
 
 namespace ETA.iOS
 {
 	public class PlatformServices : IPlatformServices
 	{
-		bool isVisible;
-		TaskCompletionSource<bool> tcs;
+		CancellationTokenSource cts;
 
 		public void DismissProgressIndicator()
 		{
+			if (!BTProgressHUD.IsVisible)
+			{
+				return;
+			}
 			BTProgressHUD.Dismiss();
-			// Indicate that task was not cancelled.
-			this.tcs.SetResult(false);
-			this.isVisible = false;
 		}
 
-		public Task<bool> ShowProgressIndicatorAsync(string msg, string cancel)
+		public CancellationToken ShowProgressIndicator(string msg, string cancel)
 		{
-			if (this.isVisible)
+			if (BTProgressHUD.IsVisible)
 			{
-				return Task.FromResult(false);
+				return this.cts.Token;
 			}
 
-			this.isVisible = true;
-			this.tcs = new TaskCompletionSource<bool>();
-			BTProgressHUD.Show(cancel, () => tcs.SetResult(true), msg, -1, ProgressHUD.MaskType.Black);
-			return tcs.Task;
+			this.cts = new CancellationTokenSource();
+
+			if (string.IsNullOrWhiteSpace(cancel))
+			{
+				BTProgressHUD.Show(msg, -1, ProgressHUD.MaskType.Black);
+			}
+			else
+			{
+				BTProgressHUD.Show(cancel, () => {
+					this.cts.Cancel();
+				}, msg, -1, ProgressHUD.MaskType.Black);
+			}
+			return this.cts.Token;
 		}
 	}
 }

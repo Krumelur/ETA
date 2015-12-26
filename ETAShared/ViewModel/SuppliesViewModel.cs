@@ -4,34 +4,59 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Views;
 
-namespace ETA.Shared
+namespace EtaShared
 {
 	/// <summary>
 	/// View model to show information about pellets supplies.
 	/// </summary>
 	public class SuppliesViewModel : BaseViewModel
 	{
-		public SuppliesViewModel (EtaManager manager, IUIService uiService) : base (manager, uiService)
+		public SuppliesViewModel (EtaManager manager, IUIService uiService, IStorage storage, INavigationService navigationService) : base (manager, uiService)
 		{
+			this.storage = storage;
+			this.navigationService = navigationService;
 		}
+
+		INavigationService navigationService;
+		IStorage storage;
 
 
 		public ICommand UpdateSuppliesInfoCommand
 		{
 			get
 			{
-				this.cts = new CancellationTokenSource();
 				return new RelayCommand(async () => {
-					// Get current supplies in storage.
-					this.supplies = await this.Manager.GetSuppliesAsync(cts.Token);
-					
-					// Update the current warning level setting.
-					this.suppliesWarningLevel = await this.Manager.GetSuppliesWarningLevelAsync(cts.Token);
-
-					this.RaisePropertyChanged(nameof(SuppliesDisplayValue));
-				}, () => true);
+					this.IsExecutingCommand = true;
+					var cts = new CancellationTokenSource();
+					await this.UpdateSuppliesAsync(cts.Token);
+					this.IsExecutingCommand = false;
+				}, () => !this.IsExecutingCommand);
 			}
+		}
+		public bool IsExecutingCommand { get; private set; }
+
+		async Task UpdateSuppliesAsync(CancellationToken token)
+		{
+			// Check if we have a server to talk to.
+			bool isServerConfigured = await this.storage.GetConfigValueAsync(SettingsViewModel.SettingServerUrl, null) != null;
+
+			if (!isServerConfigured)
+			{
+				await this.uiService.ShowMessageAsync("Bitte konfigurieren Sie erst die Verbindung zum ETA Heizkessel in den Einstellungen.", "OK");
+				this.navigationService.NavigateTo(NavigationTarget.Settings.ToString());
+				return;
+			}
+
+			// Get current supplies in storage.
+			this.supplies = await this.Manager.GetSuppliesAsync(token);
+
+			// Update the current warning level setting.
+			this.suppliesWarningLevel = await this.Manager.GetSuppliesWarningLevelAsync(token);
+
+			this.RaisePropertyChanged(nameof(SuppliesDisplayValue));
 		}
 
 		NumericUnit supplies;
@@ -93,5 +118,6 @@ namespace ETA.Shared
 				return $"{this.supplies.Value}{this.supplies.Unit}";
 			}
 		}
+
 	}
 }

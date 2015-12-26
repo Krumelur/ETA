@@ -30,6 +30,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="FormsNavigationService.cs" />
     <Compile Include="FormsUIService.cs" />
     <Compile Include="PickerCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,12 +76,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ETA.Shared\ETA.Shared.csproj">
-      <Project>{BFF8A6FE-174C-4E09-9E4F-BFE2C108E044}</Project>
-      <Name>ETA.Shared</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="SuppliesStatusPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
@@ -97,5 +92,11 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ETAShared\EtaShared.csproj">
+      <Project>{bff8a6fe-174c-4e09-9e4f-bfe2c108e044}</Project>
+      <Name>EtaShared</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

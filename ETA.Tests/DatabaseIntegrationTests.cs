@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
-using ETA.Shared;
+using EtaShared;
 using System.Threading.Tasks;
 using System.Threading;
 using Should;

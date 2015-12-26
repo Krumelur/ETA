@@ -1,7 +1,7 @@
 /*
   In App.xaml:
   <Application.Resources>
-      <vm:ViewModelLocator xmlns:vm="clr-namespace:ETA.Shared"
+      <vm:ViewModelLocator xmlns:vm="clr-namespace:EtaShared"
                            x:Key="Locator" />
   </Application.Resources>
   
@@ -11,9 +11,10 @@
 
 using System;
 using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Views;
 using Microsoft.Practices.ServiceLocation;
 
-namespace ETA.Shared
+namespace EtaShared
 {
 	/// <summary>
 	/// This class contains static references to all the view models in the
@@ -24,13 +25,14 @@ namespace ETA.Shared
 		/// <summary>
 		/// Initializes a new instance of the ViewModelLocator class.
 		/// </summary>
-		public ViewModelLocator (string databasePath, IUIService uiService, IPlatformServices platformServices)
+		public ViewModelLocator (string databasePath, IUIService uiService, IPlatformServices platformServices, INavigationService navigationService)
 		{
 			ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
 			// Support classes.
 			SimpleIoc.Default.Register<IUIService>(() => uiService);
 			SimpleIoc.Default.Register<IPlatformServices>(() => platformServices);
+			SimpleIoc.Default.Register<INavigationService>(() => navigationService);
 			SimpleIoc.Default.Register<IEtaWebApi, EtaWebApi>();
 			SimpleIoc.Default.Register<ILogger, DebugLogger>();
 			SimpleIoc.Default.Register<IStorage, DatabaseStorage>();

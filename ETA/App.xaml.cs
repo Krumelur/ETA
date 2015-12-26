@@ -1,7 +1,8 @@
-﻿using ETA.Shared;
+﻿using EtaShared;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
-//[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
 namespace ETA
 {
@@ -12,9 +13,10 @@ namespace ETA
 			this.InitializeComponent();
 
 			var uiService = new FormsUIService();
+			var navigationService = new FormsNavigationService();
 
 			// Make view model locator globally available as a resource.
-			this.Resources.Add("Locator", new ViewModelLocator(databasePath, uiService, platformServices));
+			this.Resources.Add("Locator", new ViewModelLocator(databasePath, uiService, platformServices, navigationService));
 			
 			var tabbedPage = new TabbedPage();
 			

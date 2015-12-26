@@ -1,4 +1,4 @@
-namespace ETA.Shared
+namespace EtaShared
 {
 	/// <summary>
 	/// A numeric value which is associated with a unit, for example "5kg".
@@ -6,7 +6,7 @@ namespace ETA.Shared
 	public struct NumericUnit
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ETA.Shared.NumericUnit"/> struct.
+		/// Initializes a new instance of the <see cref="EtaShared.NumericUnit"/> struct.
 		/// </summary>
 		/// <param name="value">Value.</param>
 		/// <param name="unit">Unit.</param>

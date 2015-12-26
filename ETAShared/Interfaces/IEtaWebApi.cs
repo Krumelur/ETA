@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace ETA.Shared
+namespace EtaShared
 {
 	/// <summary>
 	/// Defines all methods to communicate with the ETA web service.

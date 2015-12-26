@@ -43,10 +43,6 @@
       <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\ETA.Shared\ETA.Shared.csproj">
-      <Project>{BFF8A6FE-174C-4E09-9E4F-BFE2C108E044}</Project>
-      <Name>ETA.Shared</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tests.cs" />

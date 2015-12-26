@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 
-namespace ETA.Shared
+namespace EtaShared
 {
 	/// <summary>
 	/// Holds information about errors in the ETA system.

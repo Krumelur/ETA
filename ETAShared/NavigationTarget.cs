@@ -9,6 +9,8 @@ namespace EtaShared
 	public enum NavigationTarget
 	{
 		SuppliesInfo,
+		Statistics,
+		Messages,
 		Settings
 	}
 }

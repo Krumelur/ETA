@@ -47,6 +47,8 @@ namespace EtaShared
 			// View Models.
 			SimpleIoc.Default.Register<SuppliesViewModel> ();
 			SimpleIoc.Default.Register<SettingsViewModel>();
+			SimpleIoc.Default.Register<StatisticsViewModel>();
+			SimpleIoc.Default.Register<MessagesViewModel>();
 		}
 
 		
@@ -63,6 +65,22 @@ namespace EtaShared
 			get
 			{
 				return ServiceLocator.Current.GetInstance<SettingsViewModel>();
+			}
+		}
+
+		public StatisticsViewModel Statistics
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<StatisticsViewModel>();
+			}
+		}
+
+		public MessagesViewModel Messages
+		{
+			get
+			{
+				return ServiceLocator.Current.GetInstance<MessagesViewModel>();
 			}
 		}
 

@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 using EtaShared;
 
 namespace ETA
@@ -17,7 +18,14 @@ namespace ETA
 		{
 			base.OnAppearing();
 			await this.locator.Supplies.InitializeAsync();
-			await this.locator.Supplies.UpdateSuppliesAsync();
+
+			if((DateTime.Now - lastUpdate).TotalMinutes > 5)
+			{
+				await this.locator.Supplies.UpdateSuppliesAsync();
+				lastUpdate = DateTime.Now;
+			}
 		}
+
+		static DateTime lastUpdate = DateTime.MinValue;
 	}
 }

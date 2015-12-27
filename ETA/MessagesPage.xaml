@@ -1,0 +1,14 @@
+﻿<ContentPage
+	Title="Meldungen"
+	Icon="messages.png"
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:ETA;assembly=ETA"
+	x:Class="ETA.MessagesPage"
+	BackgroundColor="{StaticResource ContentPageBkColor}"
+	BindingContext="{Binding Messages, Source={StaticResource Locator}}">
+
+	<ListView>
+	</ListView>
+	
+</ContentPage>

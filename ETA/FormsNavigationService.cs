@@ -36,8 +36,16 @@ namespace ETA
 					tabPage.SelectedItem = tabPage.Children[0];
 					break;
 
-				case NavigationTarget.Settings:
+				case NavigationTarget.Statistics:
 					tabPage.SelectedItem = tabPage.Children[1];
+					break;
+
+				case NavigationTarget.Messages:
+					tabPage.SelectedItem = tabPage.Children[2];
+					break;
+
+				case NavigationTarget.Settings:
+					tabPage.SelectedItem = tabPage.Children[3];
 					break;
 			}
 		}

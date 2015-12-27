@@ -67,7 +67,14 @@
 				AbsoluteLayout.LayoutBounds="0.5, -30, -1, -1"
 				AnchorX="0.5"
 				AnchorY="0"
-				TranslationY="{Binding SuppliesFillAbsoluteValue, Mode=OneWay}"/>
+				TranslationY="{Binding SuppliesFillAbsoluteValue, Mode=OneWay}">
+
+				<Label.Triggers>
+					<DataTrigger TargetType="Label" Binding="{Binding IsBelowWarnLevel}" Value="True">
+						<Setter Property="TextColor" Value="Red"/>
+					</DataTrigger>
+				</Label.Triggers>
+			</Label>
 
 			<!--
 			<StackLayout AbsoluteLayout.LayoutBounds="0, 1, 1, 1" AbsoluteLayout.LayoutFlags="All">

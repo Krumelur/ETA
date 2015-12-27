@@ -18,7 +18,7 @@
 		</ResourceDictionary>
 	</ContentPage.Resources>
 
-	<StackLayout Padding="10">
+	<StackLayout Padding="10" VerticalOptions="FillAndExpand">
 		<Label Text="Maximalkapazität Lager (kg)"/>
 		<Picker
 			local:PickerCollection.Items="{Binding FormattedStorageChoices}"
@@ -45,13 +45,17 @@
 
 		<Label Text="URL/IP Heizkessel"/>
 		<Entry x:Name="UrlEntry" Placeholder="192.168.178:8080" Keyboard="Url" Text="{Binding Url}"/>
-		<Button Text="Verbindung speichern" IsEnabled="True" Command="{Binding TestConnectionCommand}">
+		<Button Text="Verbindung testen" IsEnabled="True" Command="{Binding TestConnectionCommand}">
 			<Button.Triggers>
 				<DataTrigger TargetType="Button" Binding="{Binding Source={x:Reference UrlEntry}, Path=Text.Length}" Value="0">
 					<Setter Property="IsEnabled" Value="False"/>
 				</DataTrigger>
 			</Button.Triggers>
 		</Button>
+
+
+		<Label Text="Copyright (c) 2015 c-sharX (René Ruppert)" HorizontalTextAlignment="Center"  VerticalOptions="FillAndExpand" VerticalTextAlignment="End"/>
+		<Label Text="info@c-sharx.net" HorizontalTextAlignment="Center" />
 	</StackLayout>
 	
 </ContentPage>

@@ -21,6 +21,8 @@ namespace ETA
 			var tabbedPage = new TabbedPage();
 			
 			tabbedPage.Children.Add(this.WrapInNavPage(new SuppliesStatusPage()));
+			tabbedPage.Children.Add(this.WrapInNavPage(new StatisticsPage()));
+			tabbedPage.Children.Add(this.WrapInNavPage(new MessagesPage()));
 			tabbedPage.Children.Add(this.WrapInNavPage(new SettingsPage()));
 
 			this.MainPage = tabbedPage;

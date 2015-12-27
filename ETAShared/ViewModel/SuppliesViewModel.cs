@@ -61,6 +61,7 @@ namespace EtaShared
 			this.SuppliesFillPercentage = this.currentSupplies / this.maxSuppliesLevel;
 
 			this.RaisePropertyChanged(nameof(SuppliesDisplayValue));
+			this.RaisePropertyChanged(nameof(IsBelowWarnLevel));
 
 			this.HideBusyIndicator();
 		}
@@ -83,6 +84,7 @@ namespace EtaShared
 					this.suppliesFillPercentage = value;
 					this.RaisePropertyChanged ();
 					this.RaisePropertyChanged(nameof(SuppliesFillAbsoluteValue));
+					this.RaisePropertyChanged(nameof(IsBelowWarnLevel));
 				}
 			}
 		}
@@ -103,6 +105,7 @@ namespace EtaShared
 					this.suppliesFillReferenceValue = value;
 					this.RaisePropertyChanged ();
 					this.RaisePropertyChanged(nameof(SuppliesFillAbsoluteValue));
+					this.RaisePropertyChanged(nameof(IsBelowWarnLevel));
 				}
 			}
 		}
@@ -115,6 +118,14 @@ namespace EtaShared
 		{
 			get {
 				return this.SuppliesFillReferenceValue - this.SuppliesFillPercentage * this.SuppliesFillReferenceValue;
+			}
+		}
+
+		public bool IsBelowWarnLevel
+		{
+			get
+			{
+				return this.currentSupplies <= this.suppliesWarningLevel;
 			}
 		}
 

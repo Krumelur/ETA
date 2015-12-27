@@ -1,0 +1,36 @@
+﻿<ContentPage
+	Title="Statistiken"
+	Icon="statistics.png"
+	xmlns="http://xamarin.com/schemas/2014/forms"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:local="clr-namespace:ETA;assembly=ETA"
+	x:Class="ETA.StatisticsPage"
+	BackgroundColor="{StaticResource ContentPageBkColor}"
+	BindingContext="{Binding Statistics, Source={StaticResource Locator}}">
+
+	<ContentPage.Resources>
+		<ResourceDictionary>
+			<Style TargetType="Label">
+				<Setter Property="Font" Value="Micro"/>
+				<Setter Property="TextColor" Value="#404040"/>
+			</Style>
+		</ResourceDictionary>
+	</ContentPage.Resources>
+
+	<StackLayout Padding="10">
+		<Label Text="Verbrauch gesamt"/>
+		<Entry Text="{Binding TotalConsumption}" IsEnabled="false"/>
+
+		<Label Text="Durchschnittsverbrauch pro Tag"/>
+		<Entry Text="{Binding AverageConsumptionPerDay}" IsEnabled="false"/>
+
+		<Label Text="Lager voraussichtlich leer am"/>
+		<Entry Text="{Binding DateOutOfSupplies}" IsEnabled="false"/>
+
+		<Label Text="Zeitraum" VerticalOptions="FillAndExpand" VerticalTextAlignment="End"/>
+		<Picker
+			local:PickerCollection.Items="{Binding FormattedTimeSpanChoices}"
+            SelectedIndex="{Binding TimeSpanSelectedIndex, Mode=TwoWay}"/>
+	</StackLayout>
+	
+</ContentPage>

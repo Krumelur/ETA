@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EtaShared
 {
-	public interface IPlatformServices
+	public interface IPlatformSpecific
 	{
 		/// <summary>
 		/// Shows a progress indicator.

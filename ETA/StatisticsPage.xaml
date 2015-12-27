@@ -17,18 +17,23 @@
 		</ResourceDictionary>
 	</ContentPage.Resources>
 
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Name="Aktualisieren" Command="{Binding UpdateStatisticsCommand}"/>
+	</ContentPage.ToolbarItems>
+
 	<StackLayout Padding="10">
-		<Label Text="Verbrauch gesamt"/>
-		<Entry Text="{Binding TotalConsumption}" IsEnabled="false"/>
+		<Label Text="Gesamtverbrauch im Zeitraum"/>
+		<Entry Text="{Binding FormattedConsumption}" IsEnabled="false"/>
 
 		<Label Text="Durchschnittsverbrauch pro Tag"/>
-		<Entry Text="{Binding AverageConsumptionPerDay}" IsEnabled="false"/>
+		<Entry Text="{Binding FormattedAveragePerDay, Mode=OneWay}" IsEnabled="false"/>
 
 		<Label Text="Lager voraussichtlich leer am"/>
-		<Entry Text="{Binding DateOutOfSupplies}" IsEnabled="false"/>
+		<Entry Text="{Binding FormattedDateOutOfSupplies}" IsEnabled="false"/>
 
 		<Label Text="Zeitraum" VerticalOptions="FillAndExpand" VerticalTextAlignment="End"/>
 		<Picker
+			x:Name="TimeSpanPicker"
 			local:PickerCollection.Items="{Binding FormattedTimeSpanChoices}"
             SelectedIndex="{Binding TimeSpanSelectedIndex, Mode=TwoWay}"/>
 	</StackLayout>

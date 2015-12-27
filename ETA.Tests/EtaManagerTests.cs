@@ -6,6 +6,7 @@ using System.Threading;
 using Ploeh.AutoFixture;
 using Moq;
 using Should;
+using System.Collections.Generic;
 
 namespace ETA.Tests
 {
@@ -262,6 +263,95 @@ namespace ETA.Tests
 			// Expecting dates and message to be correct.
 			errors[0].ShouldEqual(new EtaError("Flue gas sensor Interrupted", "Sensor or Cable broken or badly connected", new DateTime(2011, 6, 29, 12, 47, 50), EtaError.ERROR_TYPE.Error));
 			errors[1].ShouldEqual(new EtaError("Erinnerung Aschebox leeren 1000 kg", "Die Verschlüsse an der Aschebox öffnen und diese vom Kessel abziehen und entleeren. Der Zählerstand [Verbrauch seit Aschebox leeren] wird beim Abnehmen der Aschebox automatisch auf Null zurückgesetzt.", new DateTime(2015, 12, 21, 7, 0, 0), EtaError.ERROR_TYPE.Warning));
+		}
+
+		[Test]
+		public async Task EtaManager_GetAverageConsumptionPerDayAsync_should_return_correct_average()
+		{
+			// Create fake consumptions.
+			var fakeSupplies = new List<ISupplyData>
+			{
+				new SupplyData
+				{
+					Id = 1,
+					Amount = 100,
+					Unit = "kg",
+					TimeStamp = DateTime.Now.AddDays(-4)
+				},
+				new SupplyData
+				{
+					Id = 2,
+					Amount = 70,
+					Unit = "kg",
+					TimeStamp = DateTime.Now.AddDays(-3)
+				},
+				new SupplyData
+				{
+					Id = 3,
+					Amount = 30,
+					Unit = "kg",
+					// 2 days difference to previous value!
+					TimeStamp = DateTime.Now.AddDays(-1)
+				},
+				new SupplyData
+				{
+					Id = 4,
+					Amount = 10,
+					Unit = "kg",
+					TimeStamp = DateTime.Now
+				}
+			};
+
+			var average = await this.etaManager.GetAverageConsumptionPerDayAsync(fakeSupplies);
+			average.Value.ShouldBeInRange(23.3f, 23.4f);
+		}
+
+		[Test]
+		public async Task EtaManager_GetAverageConsumptionPerDayAsync_should_handle_refills()
+		{
+			// Create fake consumptions.
+			var fakeSupplies = new List<ISupplyData>
+			{
+				new SupplyData
+				{
+					Id = 1,
+					Amount = 100,
+					Unit = "kg",
+					TimeStamp = DateTime.Now.AddDays(-5)
+				},
+				new SupplyData
+				{
+					Id = 2,
+					Amount = 70,
+					Unit = "kg",
+					TimeStamp = DateTime.Now.AddDays(-4)
+				},
+				// Here, storage has been refilled to 500 - this should be skipped!
+				new SupplyData
+				{
+					Id = 3,
+					Amount = 500,
+					Unit = "kg",
+					TimeStamp = DateTime.Now.AddDays(-3)
+				},
+				new SupplyData
+				{
+					Id = 4,
+					Amount = 400,
+					Unit = "kg",
+					TimeStamp = DateTime.Now.AddDays(-2)
+				},
+				new SupplyData
+				{
+					Id = 5,
+					Amount = 300,
+					Unit = "kg",
+					TimeStamp = DateTime.Now.AddDays(-1)
+				}
+			};
+
+			var average = await this.etaManager.GetAverageConsumptionPerDayAsync(fakeSupplies);
+			average.Value.ShouldBeInRange(76.6f, 76.7f);
 		}
 	}
 }

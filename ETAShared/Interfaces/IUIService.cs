@@ -14,6 +14,14 @@ namespace EtaShared
 		Task ShowMessageAsync(string msg, string confirmButton);
 
 		/// <summary>
+		/// Shows a message box.
+		/// </summary>
+		/// <param name="msg"></param>
+		/// <param name="confirmButton"></param>
+		/// <returns>TRUE if the confirm button was selected</returns>
+		Task<bool> ShowMessageAsync(string msg, string confirmButton, string cancelButton);
+
+		/// <summary>
 		/// Shows a busy indicator.
 		/// </summary>
 		/// <param name="msg">message to display</param>

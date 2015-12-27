@@ -25,13 +25,13 @@ namespace EtaShared
 		/// <summary>
 		/// Initializes a new instance of the ViewModelLocator class.
 		/// </summary>
-		public ViewModelLocator (string databasePath, IUIService uiService, IPlatformServices platformServices, INavigationService navigationService)
+		public ViewModelLocator (string databasePath, IUIService uiService, IPlatformSpecific platformSpecific, INavigationService navigationService)
 		{
 			ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
 			// Support classes.
 			SimpleIoc.Default.Register<IUIService>(() => uiService);
-			SimpleIoc.Default.Register<IPlatformServices>(() => platformServices);
+			SimpleIoc.Default.Register<IPlatformSpecific>(() => platformSpecific);
 			SimpleIoc.Default.Register<INavigationService>(() => navigationService);
 			SimpleIoc.Default.Register<IEtaWebApi, EtaWebApi>();
 			SimpleIoc.Default.Register<ILogger, DebugLogger>();

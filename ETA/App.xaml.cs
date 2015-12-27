@@ -8,7 +8,7 @@ namespace ETA
 {
 	public partial class App : Application
 	{
-		public App (string databasePath, IPlatformServices platformServices)
+		public App (string databasePath, IPlatformSpecific platformSpecific)
 		{
 			this.InitializeComponent();
 
@@ -16,7 +16,7 @@ namespace ETA
 			var navigationService = new FormsNavigationService();
 
 			// Make view model locator globally available as a resource.
-			this.Resources.Add("Locator", new ViewModelLocator(databasePath, uiService, platformServices, navigationService));
+			this.Resources.Add("Locator", new ViewModelLocator(databasePath, uiService, platformSpecific, navigationService));
 			
 			var tabbedPage = new TabbedPage();
 			

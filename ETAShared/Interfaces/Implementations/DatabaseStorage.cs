@@ -65,6 +65,8 @@ namespace EtaShared
 			public DateTime TimeStamp { get; set; }
 
 			public string Unit { get; set; }
+
+			public override string ToString() => $"Id = {Id}, Amount = {Amount}, TimeStamp = {TimeStamp}, Unit = {Unit}";
 		}
 
 		public DatabaseStorage(ILogger logger)
@@ -228,6 +230,12 @@ namespace EtaShared
 			// so we have to do this manually.
 			var castResult = await Task.Run(() => result.ToList<ISupplyData>()).ConfigureAwait(false);
 			return castResult;
+		}
+
+		public async Task DeleteSuppliesDataAsync()
+		{
+			await this.connection.DropTableAsync<DatabaseSupplyDataItem>();
+			await this.connection.CreateTableAsync<DatabaseSupplyDataItem>();
 		}
 	}
 }

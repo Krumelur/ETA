@@ -29,7 +29,7 @@ namespace ETA.iOS
 			Console.WriteLine($"iOS database location: {databasePath}");
 			var fullPath = Path.Combine(databasePath, "data.sqlite");
 
-			LoadApplication(new App(fullPath, new PlatformServices()));
+			LoadApplication(new App(fullPath, new PlatformSpecific()));
 
 			/*
 			UITabBar.Appearance.BarTintColor = UIColor.Black;

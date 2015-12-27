@@ -17,7 +17,7 @@ namespace ETA
 		public CancellationToken ShowBusyIndicator(string msg, string cancel)
 		{
 			Application.Current.MainPage.IsBusy = true;
-			var platform = SimpleIoc.Default.GetInstance<IPlatformServices>();
+			var platform = SimpleIoc.Default.GetInstance<IPlatformSpecific>();
 			var token = platform.ShowProgressIndicator(msg, cancel);
 			return token;
 		}
@@ -25,7 +25,7 @@ namespace ETA
 		public void HideBusyIndicator()
 		{
 			Application.Current.MainPage.IsBusy = false;
-			var platform = SimpleIoc.Default.GetInstance<IPlatformServices>();
+			var platform = SimpleIoc.Default.GetInstance<IPlatformSpecific>();
 			platform.DismissProgressIndicator();
 		}
 
@@ -33,5 +33,12 @@ namespace ETA
 		{
 			return Application.Current.MainPage.DisplayAlert(string.Empty, msg, null, confirmButton);
 		}
+
+		public Task<bool> ShowMessageAsync(string msg, string confirmButton, string cancelButton)
+		{
+			return Application.Current.MainPage.DisplayAlert(string.Empty, msg, confirmButton, cancelButton);
+		}
+
+
 	}
 }

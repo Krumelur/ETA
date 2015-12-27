@@ -8,7 +8,7 @@ using EtaShared;
 
 namespace ETA.iOS
 {
-	public class PlatformServices : IPlatformServices
+	public class PlatformSpecific : IPlatformSpecific
 	{
 		CancellationTokenSource cts;
 

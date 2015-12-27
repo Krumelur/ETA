@@ -129,8 +129,13 @@ namespace EtaShared
 			return apiVersion;
 		}
 
-		public async Task<NumericUnit> GetSuppliesAsync(CancellationToken token = default(CancellationToken))
+		public async Task<NumericUnit> GetSuppliesAsync(CancellationToken token = default(CancellationToken), bool useCache = false)
 		{
+			if (useCache && this.cachedSupplies != NumericUnit.Empty)
+			{
+				return this.cachedSupplies;
+			}
+
 			if (!this.CheckInitialization())
 			{
 				return NumericUnit.Empty;
@@ -147,9 +152,11 @@ namespace EtaShared
 				var unit= this.GetContentElement(xmlResponse, "value").Attribute("unit").Value;
 
 				amount = new NumericUnit(value / divider, unit);
+				this.cachedSupplies = amount;
 			}
 			catch (Exception ex)
 			{
+				this.cachedSupplies = NumericUnit.Empty;
 				this.Logger?.Log(ex);
 			}
 
@@ -178,6 +185,7 @@ namespace EtaShared
 
 			return amount;
 		}
+		NumericUnit cachedSupplies = NumericUnit.Empty;
 
 		public async Task<NumericUnit> GetSuppliesWarningLevelAsync(CancellationToken token = default(CancellationToken))
 		{
@@ -263,6 +271,112 @@ namespace EtaShared
 			}
 
 			return errors;
+		}
+
+		public async Task<IList<ISupplyData>> GetSuppliesInRangeAsync(DateTime start, DateTime end)
+		{
+			// Generate some test data in the DB to check performance.
+#if DEBUG
+			/*
+			var rand = new Random();
+			double amount = 0f;
+			DateTime date = DateTime.Now;
+			while (amount <= 3500f)
+			{
+				var item = new SupplyData
+				{
+					Id = -1,
+					Amount = amount,
+					TimeStamp = date,
+					Unit = "kg"
+				};
+				amount += rand.Next(10, 60);
+				date = date - TimeSpan.FromHours(rand.Next(22, 55));
+				await this.storage.SaveSupplyDataAsync(item);
+			}
+			*/
+#endif
+		
+			var supplies = await this.storage.GetSupplyDataAsync(data => data.TimeStamp >= start && data.TimeStamp <= end);
+			return supplies;
+		}
+
+		public async Task<NumericUnit> GetAverageConsumptionPerDayAsync(IList<ISupplyData> supplies)
+		{
+			var averagesPerDay = new List<double>();
+			await Task.Run(() =>
+			{
+				// Order ascending by date (start with oldest).
+				var orderedSupplies = supplies.OrderBy(d => d.TimeStamp).ToList();
+				for (int i = 1; i < orderedSupplies.Count; i++)
+				{
+					var previousData = orderedSupplies[i - 1];
+					var currentData = orderedSupplies[i];
+
+					// Check if suppplies have been restocked.
+					if (currentData.Amount > previousData.Amount)
+					{
+						// Skip refill.
+						this.Logger?.Log($"Average calculation: storage refilled - skipping {currentData}");
+					}
+					else
+					{
+						var deltaAmount = previousData.Amount - currentData.Amount;
+						var deltaTime = (currentData.TimeStamp - previousData.TimeStamp).TotalDays;
+
+						var averagePerDay = deltaAmount / deltaTime;
+
+						averagesPerDay.Add(averagePerDay);
+					}
+				}
+			});
+
+			if (averagesPerDay.Count >= 2)
+			{
+				var totalAveragePerDay = averagesPerDay.Average();
+				return new NumericUnit(totalAveragePerDay, "kg");
+			}
+
+			return NumericUnit.Empty;
+		}
+
+		public async Task<NumericUnit> GetTotalConsumptionAsync(IList<ISupplyData> supplies)
+		{
+			if (supplies == null || supplies.Count <= 0)
+			{
+				return NumericUnit.Empty;
+			}
+
+			double totalAmount = 0f;
+			await Task.Run(() =>
+			{
+				// Order ascending by date (start with oldest).
+				var orderedSupplies = supplies.OrderBy(d => d.TimeStamp).ToList();
+				for (int i = 1; i < orderedSupplies.Count; i++)
+				{
+					var previousData = orderedSupplies[i - 1];
+					var currentData = orderedSupplies[i];
+
+					// Check if suppplies have been restocked.
+					if (currentData.Amount > previousData.Amount)
+					{
+						// Skip refill.
+						this.Logger?.Log($"Comsumption calculation: storage refilled - skipping {currentData}");
+					}
+					else
+					{
+						var deltaAmount = previousData.Amount - currentData.Amount;
+						totalAmount += deltaAmount;
+					}
+				}
+			});
+
+			return new NumericUnit(totalAmount, "kg");
+		}
+
+		public async Task DeleteSuppliesDataAsync()
+		{
+			await this.storage.DeleteSuppliesDataAsync();
 		}
 	}
 }

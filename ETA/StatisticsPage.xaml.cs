@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Xamarin.Forms;
+using EtaShared;
 
 namespace ETA
 {
@@ -10,6 +11,16 @@ namespace ETA
 		public StatisticsPage ()
 		{
 			InitializeComponent ();
+
+			this.TimeSpanPicker.Unfocused += TimeSpanPicker_Unfocused;
+		}
+
+		private void TimeSpanPicker_Unfocused(object sender, FocusEventArgs e)
+		{
+			// Now this is hacky, but necessary. The Picker control fires can be data bound to the SelectedItem property.
+			// However this property changes before the picker gets dismissed by the user via the "Done" button.
+			var vm = (StatisticsViewModel)this.BindingContext;
+			vm.UpdateStatisticsAsync();
 		}
 	}
 }

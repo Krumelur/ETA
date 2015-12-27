@@ -164,6 +164,22 @@ namespace EtaShared
 		}
 		int storageWarningLevelSelectedIndex;
 
+		public ICommand DeleteDataCommand
+		{
+			get
+			{
+				return new RelayCommand(async () => {
+					bool confirm = await this.ShowMessageAsync("Möchten Sie wirklich die Historie der Vorratswerte löschen?", "Ja", "Nein");
+					if (confirm)
+					{
+						this.ShowBusyIndicator("Lösche Daten");
+						await this.Manager.DeleteSuppliesDataAsync();
+						this.HideBusyIndicator();
+					}
+				});
+			}
+		}
+
 		public ICommand TestConnectionCommand
 		{
 			get

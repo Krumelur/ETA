@@ -53,8 +53,9 @@
 			</Button.Triggers>
 		</Button>
 
-
-		<Label Text="Copyright (c) 2015 c-sharX (René Ruppert)" HorizontalTextAlignment="Center"  VerticalOptions="FillAndExpand" VerticalTextAlignment="End"/>
+		<Label Text=" " HorizontalTextAlignment="Center"  VerticalOptions="FillAndExpand" VerticalTextAlignment="End"/>
+		<Button Text="Daten Historie löschen" Command="{Binding DeleteDataCommand}" BackgroundColor="Red" TextColor="White"/>
+		<Label Text="Copyright (c) 2015 c-sharX (René Ruppert)" HorizontalTextAlignment="Center"/>
 		<Label Text="info@c-sharx.net" HorizontalTextAlignment="Center" />
 	</StackLayout>
 	

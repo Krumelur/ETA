@@ -34,6 +34,11 @@ namespace EtaShared
 			return this.uiService.ShowMessageAsync(msg, confirm);
 		}
 
+		protected Task<bool> ShowMessageAsync(string msg, string confirm, string cancel)
+		{
+			return this.uiService.ShowMessageAsync(msg, confirm, cancel);
+		}
+
 		protected void ShowBusyIndicator(string msg)
 		{
 			this.ShowBusyIndicator(msg, null);

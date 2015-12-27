@@ -23,12 +23,15 @@ namespace ETA.iOS
 
 		public CancellationToken ShowProgressIndicator(string msg, string cancel)
 		{
+			if(this.cts == null)
+			{
+				this.cts = new CancellationTokenSource();
+			}
+
 			if (BTProgressHUD.IsVisible)
 			{
 				return this.cts.Token;
 			}
-
-			this.cts = new CancellationTokenSource();
 
 			if (string.IsNullOrWhiteSpace(cancel))
 			{
@@ -38,6 +41,7 @@ namespace ETA.iOS
 			{
 				BTProgressHUD.Show(cancel, () => {
 					this.cts.Cancel();
+					this.cts = null;
 				}, msg, -1, ProgressHUD.MaskType.Black);
 			}
 			return this.cts.Token;

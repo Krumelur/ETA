@@ -30,7 +30,7 @@
 	</ContentPage.Resources>
 
 	<ContentPage.ToolbarItems>
-		<ToolbarItem Name="Refresh" Command="{Binding UpdateSuppliesInfoCommand}"/>
+		<ToolbarItem Name="Aktualisieren" Command="{Binding UpdateSuppliesInfoCommand}"/>
 	</ContentPage.ToolbarItems>
 
 	<Grid>

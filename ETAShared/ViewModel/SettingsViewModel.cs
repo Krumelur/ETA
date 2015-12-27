@@ -1,12 +1,9 @@
-using GalaSoft.MvvmLight;
-using System.Diagnostics;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Threading;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace EtaShared
 {
@@ -19,7 +16,7 @@ namespace EtaShared
 		public const string SettingStorageWarnLevel = "storage_warn_level";
 		public const string SettingStorageCapacity = "storage_capacity";
 
-		public SettingsViewModel(EtaManager manager, IUIService uiService, IStorage storage) : base(manager, uiService)
+		public SettingsViewModel(EtaManager manager, IUIService uiService, IStorage storage) : base(manager, uiService, storage)
 		{
 			var formattedChoices = new List<string>();
 			var choices = new List<double>();
@@ -35,19 +32,17 @@ namespace EtaShared
 			this.StorageCapacitySelectedIndex = 10;
 			this.StorageWarningLevelSelectedIndex = 2;
 			this.Url = string.Empty;
-
-			this.storage = storage;
 		}
 
-		IStorage storage;
 
 		/// <summary>
 		/// Initializes the settings from the storage.
 		/// </summary>
 		/// <returns></returns>
-		public async Task InitializeAsync()
+		public override async Task InitializeAsync()
 		{
 			this.ShowBusyIndicator("Lade Konfiguration");
+			await base.InitializeAsync();
 			this.Url = await this.storage.GetConfigValueAsync(SettingServerUrl, string.Empty);
 			var value = await this.storage.GetConfigValueAsync(SettingStorageWarnLevel, "1000");
 			this.StorageWarnLevel = Convert.ToDouble(value);
@@ -199,7 +194,7 @@ namespace EtaShared
 							port = Convert.ToInt32(hostName.Split(':')[1]);
 						}
 						// Update manager's config.
-						this.Manager.Config = new EtaConfig(protocol + hostName, port);
+						this.Manager.Config = new EtaConfig(protocol + hostName + ":" + port);
 
 						this.Manager.Logger?.Log($"Trying to connect to: {this.Manager.Config}");
 
@@ -211,7 +206,7 @@ namespace EtaShared
 						{
 							// Reset config.
 							this.Manager.Config = currentConfig;
-							await this.ShowMessageAsync("Verbindungstest fehlgeschlagen. Bitte überprüfen Sie die Adresse und den Port.", "OK");
+							await this.ShowMessageAsync("Verbindungstest fehlgeschlagen. Bitte ¨¹berpr¨¹fen Sie die Adresse und den Port.", "OK");
 						}
 						else
 						{
@@ -236,7 +231,16 @@ namespace EtaShared
 		{
 			get
 			{	
-				return new RelayCommand( () => {
+				return new RelayCommand( async () => {
+					var token = this.uiService.ShowBusyIndicator("Lade Warngrenze", "Abbrechen");
+					var warningLevel = await this.Manager.GetSuppliesWarningLevelAsync(token);
+					this.uiService.HideBusyIndicator();
+					if(warningLevel != NumericUnit.Empty && warningLevel.Value >= 0)
+					{
+						double roundedWarningLevel = Math.Round(warningLevel.Value/500f)*500f;
+						this.StorageWarningLevelSelectedIndex = this.StorageChoices.IndexOf(roundedWarningLevel);
+						this.StorageWarnLevel = roundedWarningLevel;
+					}
 				}, () => true);
 			}
 		}

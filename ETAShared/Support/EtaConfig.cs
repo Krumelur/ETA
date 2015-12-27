@@ -7,10 +7,9 @@ namespace EtaShared
 	/// </summary>
 	public sealed class EtaConfig
 	{
-		public EtaConfig (string hostName, int port = 8080)
+		public EtaConfig (string hostName)
 		{
 			this.Host = hostName;
-			this.Port = port;
 		}
 
 		/// <summary>
@@ -40,15 +39,6 @@ namespace EtaShared
 		string host;
 
 		/// <summary>
-		/// Gets or sets the port. Defaults to 8080.
-		/// </summary>
-		public int Port
-		{
-			get;
-			private set;
-		}
-
-		/// <summary>
 		/// Gets the complete connetion address (e.g. "http://123.122.121:8080");
 		/// </summary>
 		public string ConnectionAddress
@@ -60,18 +50,11 @@ namespace EtaShared
 					return null;
 				}
 
-				if(this.Port > 0)
-				{
-					return $"{this.Host}:{this.Port}";
-				}
-				else
-				{
-					return this.Host;
-				}
+				return this.Host;
 			}
 		}
 
-		public override string ToString () => $"[EtaConfig: Host={this.Host}, Port={this.Port}]";
+		public override string ToString () => $"[EtaConfig: Host={this.Host}]";
 	}
 }
 

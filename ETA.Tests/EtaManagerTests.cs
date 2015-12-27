@@ -29,7 +29,7 @@ namespace ETA.Tests
 				var fixture = new Fixture();
 				this.etaManager = new EtaManager(this.etaWebApiMock.Object, this.loggerMock.Object, storageMock.Object, () => new SupplyData());
 
-				this.etaManager.Config = new EtaConfig("192.168.178.35", 8080);
+				this.etaManager.Config = new EtaConfig("http://192.168.178.35:8080");
 			}
 			catch (Exception ex)
 			{

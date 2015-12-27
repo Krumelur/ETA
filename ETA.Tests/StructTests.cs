@@ -31,7 +31,7 @@ namespace ETA.Tests
 
 				this.etaManager = new EtaManager(this.etaWebApiMock.Object, this.loggerMock.Object, storageMock.Object, supplyDataCreatorMock.Object);
 
-				this.etaManager.Config = new EtaConfig("192.168.178.35", 8080);
+				this.etaManager.Config = new EtaConfig("http://192.168.178.35:8080");
 			}
 			catch (Exception ex)
 			{

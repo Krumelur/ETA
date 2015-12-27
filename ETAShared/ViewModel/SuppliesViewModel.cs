@@ -14,14 +14,12 @@ namespace EtaShared
 	/// </summary>
 	public class SuppliesViewModel : BaseViewModel
 	{
-		public SuppliesViewModel (EtaManager manager, IUIService uiService, IStorage storage, INavigationService navigationService) : base (manager, uiService)
+		public SuppliesViewModel (EtaManager manager, IUIService uiService, IStorage storage, INavigationService navigationService) : base (manager, uiService, storage)
 		{
-			this.storage = storage;
 			this.navigationService = navigationService;
 		}
 
 		INavigationService navigationService;
-		IStorage storage;
 
 	
 		public ICommand UpdateSuppliesInfoCommand
@@ -30,21 +28,23 @@ namespace EtaShared
 			{
 				return new RelayCommand(async () => {
 					this.IsExecutingCommand = true;
-					var cts = new CancellationTokenSource();
-					await this.UpdateSuppliesAsync(cts.Token);
+					await this.UpdateSuppliesAsync();
 					this.IsExecutingCommand = false;
 				}, () => !this.IsExecutingCommand);
 			}
 		}
 		public bool IsExecutingCommand { get; private set; }
 
-		async Task UpdateSuppliesAsync(CancellationToken token)
+		public async Task UpdateSuppliesAsync()
 		{
+			var token = this.ShowBusyIndicator("Aktualisieren", "Abbrechen");
+
 			// Check if we have a server to talk to.
 			bool isServerConfigured = await this.storage.GetConfigValueAsync(SettingsViewModel.SettingServerUrl, null) != null;
 
 			if (!isServerConfigured)
 			{
+				this.HideBusyIndicator();
 				await this.uiService.ShowMessageAsync("Bitte konfigurieren Sie erst die Verbindung zum ETA Heizkessel in den Einstellungen.", "OK");
 				this.navigationService.NavigateTo(NavigationTarget.Settings.ToString());
 				return;
@@ -61,6 +61,8 @@ namespace EtaShared
 			this.SuppliesFillPercentage = this.currentSupplies / this.maxSuppliesLevel;
 
 			this.RaisePropertyChanged(nameof(SuppliesDisplayValue));
+
+			this.HideBusyIndicator();
 		}
 
 		NumericUnit currentSupplies;
@@ -112,7 +114,7 @@ namespace EtaShared
 		public double SuppliesFillAbsoluteValue
 		{
 			get {
-				return this.SuppliesFillPercentage * this.SuppliesFillReferenceValue;
+				return this.SuppliesFillReferenceValue - this.SuppliesFillPercentage * this.SuppliesFillReferenceValue;
 			}
 		}
 

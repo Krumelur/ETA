@@ -23,7 +23,7 @@ namespace EtaShared
 		INavigationService navigationService;
 		IStorage storage;
 
-
+	
 		public ICommand UpdateSuppliesInfoCommand
 		{
 			get
@@ -51,16 +51,21 @@ namespace EtaShared
 			}
 
 			// Get current supplies in storage.
-			this.supplies = await this.Manager.GetSuppliesAsync(token);
+			this.currentSupplies = await this.Manager.GetSuppliesAsync(token);
 
 			// Update the current warning level setting.
-			this.suppliesWarningLevel = await this.Manager.GetSuppliesWarningLevelAsync(token);
+			this.suppliesWarningLevel = new NumericUnit(Convert.ToDouble(await this.storage.GetConfigValueAsync(SettingsViewModel.SettingStorageWarnLevel, "1000")), "kg");
+			// maxLevel gets represented in the UI by SuppliesFillReferenceValue (=the height of the view).
+			this.maxSuppliesLevel = new NumericUnit(Convert.ToDouble(await this.storage.GetConfigValueAsync(SettingsViewModel.SettingStorageCapacity, "5000")), "kg");
+
+			this.SuppliesFillPercentage = this.currentSupplies / this.maxSuppliesLevel;
 
 			this.RaisePropertyChanged(nameof(SuppliesDisplayValue));
 		}
 
-		NumericUnit supplies;
+		NumericUnit currentSupplies;
 		NumericUnit suppliesWarningLevel;
+		NumericUnit maxSuppliesLevel;
 
 		/// <summary>
 		/// Defines the filling of the supplies storage in percent. Changing this value will also change SuppliesFillAbsoluteValue.
@@ -115,7 +120,7 @@ namespace EtaShared
 		{
 			get
 			{
-				return $"{this.supplies.Value}{this.supplies.Unit}";
+				return $"{this.currentSupplies.Value}{this.currentSupplies.Unit}";
 			}
 		}
 

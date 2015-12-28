@@ -51,6 +51,12 @@ namespace EtaShared
 		Task<IList<ISupplyData>> GetSupplyDataAsync(Expression<Func<ISupplyData, bool>> filter);
 
 		/// <summary>
+		/// Gets the newest stored supply data.
+		/// </summary>
+		/// <returns></returns>
+		Task<ISupplyData> GetLatestSupplyDataAsync();
+
+		/// <summary>
 		/// Deletes all supplies history.
 		/// </summary>
 		Task DeleteSuppliesDataAsync();

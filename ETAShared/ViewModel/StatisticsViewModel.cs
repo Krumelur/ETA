@@ -160,10 +160,12 @@ namespace EtaShared
 			else
 			{
 				this.FormattedConsumption = $"{consumption.Value:N0}{consumption.Unit}";
-			}
+			} 
 
-			var currentSupplies = await this.Manager.GetSuppliesAsync(token, useCache: true);
-			if (currentSupplies != NumericUnit.Empty)
+			// Get from server.
+			var currentSupplies = await this.Manager.GetSuppliesAsync(token);
+
+			if (currentSupplies != NumericUnit.Empty && averageConsumptionPerDay != NumericUnit.Empty)
 			{
 				var daysLeft = currentSupplies / averageConsumptionPerDay.Value;
 				var outOfSupplies = DateTime.Now.AddDays(daysLeft);
@@ -171,13 +173,10 @@ namespace EtaShared
 			}
 			else
 			{
-				this.FormattedDateOutOfSupplies = "(keine Berechnung möglich)";
+				this.FormattedDateOutOfSupplies = "(keine Berechnung m?glich)"; 
 			}
-			
-
 
 			this.HideBusyIndicator();
-			
 		}
 	}
 }

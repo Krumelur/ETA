@@ -1,14 +1,32 @@
-﻿<ContentPage
-	Title="Meldungen"
-	Icon="messages.png"
-	xmlns="http://xamarin.com/schemas/2014/forms"
-	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	xmlns:local="clr-namespace:ETA;assembly=ETA"
-	x:Class="ETA.MessagesPage"
-	BackgroundColor="{StaticResource ContentPageBkColor}"
-	BindingContext="{Binding Messages, Source={StaticResource Locator}}">
-
-	<ListView>
+﻿<ContentPage Title="Meldungen" Icon="messages.png" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:ETA;assembly=ETA" x:Class="ETA.MessagesPage" BackgroundColor="{StaticResource ContentPageBkColor}" BindingContext="{Binding Messages, Source={StaticResource Locator}}">
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Name="Aktualisieren" Command="{Binding UpdateMessagesCommand}" />
+	</ContentPage.ToolbarItems>
+	<ListView ItemsSource="{Binding Messages}" HasUnevenRows="true">
+		<ListView.ItemTemplate>
+			<DataTemplate>
+				<ViewCell>
+					<Grid Padding="5">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="40" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<BoxView BackgroundColor="White" />
+						<Image WidthRequest="40" Aspect="AspectFit" Source="error.png" VerticalOptions="Start">
+							<Image.Triggers>
+								<DataTrigger TargetType="Image" Binding="{Binding ErrorType}" Value="Warning">
+									<Setter Property="Source" Value="warning.png" />
+								</DataTrigger>
+							</Image.Triggers>
+						</Image>
+						<StackLayout Grid.Column="1" VerticalOptions="Center">
+							<Label Text="{Binding OccurredAt, StringFormat='{0:F}'}" FontSize="Micro" TextColor="Gray" />
+							<Label Text="{Binding Message}" FontSize="Medium" TextColor="Accent" />
+							<Label Text="{Binding Reason}" FontSize="Small" TextColor="Gray" />
+						</StackLayout>
+					</Grid>
+				</ViewCell>
+			</DataTemplate>
+		</ListView.ItemTemplate>
 	</ListView>
-	
 </ContentPage>

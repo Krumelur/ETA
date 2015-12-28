@@ -237,5 +237,12 @@ namespace EtaShared
 			await this.connection.DropTableAsync<DatabaseSupplyDataItem>();
 			await this.connection.CreateTableAsync<DatabaseSupplyDataItem>();
 		}
+
+		public async Task<ISupplyData> GetLatestSupplyDataAsync()
+		{
+			var newestDate = await this.connection.ExecuteScalarAsync<DateTime> ("SELECT MAX(TimeStamp) FROM SupplyData");
+			var newestItem = (await this.GetSupplyDataAsync (item => item.TimeStamp >= newestDate)).FirstOrDefault ();
+			return newestItem;
+		}
 	}
 }

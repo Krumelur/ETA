@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using EtaShared;
 using Xamarin.Forms;
 
 namespace ETA
@@ -10,7 +8,21 @@ namespace ETA
 		public MessagesPage ()
 		{
 			InitializeComponent ();
+			this.vm = (MessagesViewModel)this.BindingContext;
 		}
+
+		MessagesViewModel vm;
+
+		protected async override void OnAppearing()
+		{
+			base.OnAppearing();
+			await this.vm.InitializeAsync();if (!this.hasUpdated)
+			{
+				await this.vm.UpdateMessagesAsync ();
+				this.hasUpdated = true;
+			}
+		}
+		bool hasUpdated;
 	}
 }
 

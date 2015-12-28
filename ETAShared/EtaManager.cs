@@ -129,13 +129,14 @@ namespace EtaShared
 			return apiVersion;
 		}
 
-		public async Task<NumericUnit> GetSuppliesAsync(CancellationToken token = default(CancellationToken), bool useCache = false)
+		public async Task<ISupplyData> GetLatestCachedSupplyAsync()
 		{
-			if (useCache && this.cachedSupplies != NumericUnit.Empty)
-			{
-				return this.cachedSupplies;
-			}
+			var cachedSupplies = await this.storage.GetLatestSupplyDataAsync();
+			return cachedSupplies;
+		}
 
+		public async Task<NumericUnit> GetSuppliesAsync(CancellationToken token = default(CancellationToken))
+		{
 			if (!this.CheckInitialization())
 			{
 				return NumericUnit.Empty;
@@ -152,11 +153,9 @@ namespace EtaShared
 				var unit= this.GetContentElement(xmlResponse, "value").Attribute("unit").Value;
 
 				amount = new NumericUnit(value / divider, unit);
-				this.cachedSupplies = amount;
 			}
 			catch (Exception ex)
 			{
-				this.cachedSupplies = NumericUnit.Empty;
 				this.Logger?.Log(ex);
 			}
 
@@ -185,7 +184,6 @@ namespace EtaShared
 
 			return amount;
 		}
-		NumericUnit cachedSupplies = NumericUnit.Empty;
 
 		public async Task<NumericUnit> GetSuppliesWarningLevelAsync(CancellationToken token = default(CancellationToken))
 		{
@@ -369,14 +367,14 @@ namespace EtaShared
 						totalAmount += deltaAmount;
 					}
 				}
-			});
+			}).ConfigureAwait(false);
 
-			return new NumericUnit(totalAmount, "kg");
+			return totalAmount > 0 ? new NumericUnit(totalAmount, "kg") : NumericUnit.Empty;
 		}
-
+			
 		public async Task DeleteSuppliesDataAsync()
 		{
-			await this.storage.DeleteSuppliesDataAsync();
+			await this.storage.DeleteSuppliesDataAsync().ConfigureAwait(false);
 		}
 	}
 }

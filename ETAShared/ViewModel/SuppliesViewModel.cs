@@ -52,6 +52,17 @@ namespace EtaShared
 
 			// Get current supplies in storage.
 			this.currentSupplies = await this.Manager.GetSuppliesAsync(token);
+			this.suppliesUpdatedOn = DateTime.Now;
+			if (this.currentSupplies == NumericUnit.Empty)
+			{
+				// Failed to retrieve value. Use last known.
+				var latestSupply = await this.Manager.GetLatestCachedSupplyAsync ();
+				if (latestSupply != null)
+				{
+					this.currentSupplies = new NumericUnit (latestSupply.Amount, latestSupply.Unit);
+					this.suppliesUpdatedOn = latestSupply.TimeStamp;
+				}
+			}
 
 			// Update the current warning level setting.
 			this.suppliesWarningLevel = new NumericUnit(Convert.ToDouble(await this.storage.GetConfigValueAsync(SettingsViewModel.SettingStorageWarnLevel, "1000")), "kg");
@@ -62,13 +73,16 @@ namespace EtaShared
 
 			this.RaisePropertyChanged(nameof(SuppliesDisplayValue));
 			this.RaisePropertyChanged(nameof(IsBelowWarnLevel));
-
+			this.RaisePropertyChanged (nameof (FormattedSuppliesUpdatedOn));
 			this.HideBusyIndicator();
 		}
 
 		NumericUnit currentSupplies;
 		NumericUnit suppliesWarningLevel;
 		NumericUnit maxSuppliesLevel;
+		DateTime suppliesUpdatedOn;
+
+		public string FormattedSuppliesUpdatedOn => $"{this.suppliesUpdatedOn:D}";
 
 		/// <summary>
 		/// Defines the filling of the supplies storage in percent. Changing this value will also change SuppliesFillAbsoluteValue.

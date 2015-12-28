@@ -185,7 +185,7 @@ namespace EtaShared
 			get
 			{
 				return new RelayCommand(async () => {
-					var token = this.ShowBusyIndicator("Teste Verbinding", "Abbrechen");
+					var token = this.ShowBusyIndicator("Teste Verbindung", "Abbrechen");
 					var currentConfig = this.Manager.Config;
 					try
 					{

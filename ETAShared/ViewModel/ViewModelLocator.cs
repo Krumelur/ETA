@@ -84,6 +84,14 @@ namespace EtaShared
 			}
 		}
 
+		public EtaManager Manager
+		{
+			get
+			{ 
+				return ServiceLocator.Current.GetInstance<EtaManager> ();
+			}
+		}
+
 		public static void Cleanup ()
 		{
 			// TODO Clear the ViewModels

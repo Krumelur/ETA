@@ -1,6 +1,8 @@
 ﻿using EtaShared;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Threading.Tasks;
+using System.Threading;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
@@ -16,7 +18,8 @@ namespace ETA
 			var navigationService = new FormsNavigationService();
 
 			// Make view model locator globally available as a resource.
-			this.Resources.Add("Locator", new ViewModelLocator(databasePath, uiService, platformSpecific, navigationService));
+			this.locator = new ViewModelLocator(databasePath, uiService, platformSpecific, navigationService);
+			this.Resources.Add("Locator", this.locator);
 			
 			var tabbedPage = new TabbedPage();
 			
@@ -26,6 +29,19 @@ namespace ETA
 			tabbedPage.Children.Add(this.WrapInNavPage(new SettingsPage()));
 
 			this.MainPage = tabbedPage;
+		}
+
+		ViewModelLocator locator;
+
+		public async Task<string> RunBackgroundUpdate(CancellationToken token)
+		{
+			await this.locator.Manager.GetSuppliesAsync (token);
+			var errors = await this.locator.Manager.GetErrorsAsync (token);
+			if (errors != null && errors.Count > 0)
+			{
+				return errors [0].Message;
+			}
+			return null;
 		}
 
 		NavigationPage WrapInNavPage(ContentPage page)

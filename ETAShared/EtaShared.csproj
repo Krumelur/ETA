@@ -93,4 +93,10 @@
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
     <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
   </Target>
+  <ItemGroup>
+    <ProjectReference Include="..\ETA.Resources\ETA.Resources.csproj">
+      <Project>{7F85F628-3832-4B49-B69D-E08DFCC5CF2C}</Project>
+      <Name>ETA.Resources</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

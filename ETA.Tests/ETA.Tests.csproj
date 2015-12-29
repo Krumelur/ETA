@@ -30,14 +30,6 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SQLite-net, Version=1.0.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\sqlite-net-pcl.1.0.11\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLite-net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SQLitePCL.raw, Version=0.7.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SQLitePCL.raw_basic.0.7.1\lib\net45\SQLitePCL.raw.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
@@ -59,6 +51,12 @@
     <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="SQLite-net, Version=1.0.9.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\sqlite-net-pcl.1.0.11\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLite-net.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCL.raw, Version=0.7.1.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\SQLitePCL.raw_basic.0.7.1\lib\net45\SQLitePCL.raw.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseIntegrationTests.cs" />
@@ -76,7 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ETAShared\EtaShared.csproj">
-      <Project>{bff8a6fe-174c-4e09-9e4f-bfe2c108e044}</Project>
+      <Project>{BFF8A6FE-174C-4E09-9E4F-BFE2C108E044}</Project>
       <Name>EtaShared</Name>
     </ProjectReference>
   </ItemGroup>

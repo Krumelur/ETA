@@ -18,7 +18,7 @@ namespace EtaShared
 
 		public override async Task InitializeAsync ()
 		{
-			this.ShowBusyIndicator("Initialisierung");
+			this.ShowBusyIndicator(Localize("Initializing"));
 			await base.InitializeAsync();
 			this.HideBusyIndicator ();
 		}
@@ -43,7 +43,7 @@ namespace EtaShared
 
 		public async Task UpdateMessagesAsync()
 		{
-			var token = this.ShowBusyIndicator("Aktualisiere Meldungen", "Abbrechen");
+			var token = this.ShowBusyIndicator(Localize("UpdatingMessages"), Localize("Cancel"));
 
 			var errors =  await this.Manager.GetErrorsAsync (token);
 			if (errors != null)

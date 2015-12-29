@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using System;
+using ETA.Resources;
 
 namespace EtaShared
 {
@@ -52,6 +53,18 @@ namespace EtaShared
 		protected void HideBusyIndicator()
 		{
 			this.uiService.HideBusyIndicator();
+		}
+
+		protected static string Localize(string constant)
+		{
+			try
+			{
+			return Strings.ResourceManager.GetString(constant);
+			}
+			catch
+			{
+				return constant;
+			}
 		}
 	}
 }

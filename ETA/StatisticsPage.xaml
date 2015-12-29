@@ -1,5 +1,5 @@
 ﻿<ContentPage
-	Title="Statistiken"
+	Title="{local:Translate Title_Statistics}"
 	Icon="statistics.png"
 	xmlns="http://xamarin.com/schemas/2014/forms"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -18,17 +18,17 @@
 	</ContentPage.Resources>
 
 	<ContentPage.ToolbarItems>
-		<ToolbarItem Name="Aktualisieren" Command="{Binding UpdateStatisticsCommand}"/>
+		<ToolbarItem Name="{local:Translate Refresh}" Command="{Binding UpdateStatisticsCommand}"/>
 	</ContentPage.ToolbarItems>
 
 	<StackLayout Padding="10">
-		<Label Text="Gesamtverbrauch im Zeitraum"/>
+		<Label Text="{local:Translate TotalConsumptionInTimespan}"/>
 		<Entry Text="{Binding FormattedConsumption}" IsEnabled="false"/>
 
-		<Label Text="Durchschnittsverbrauch pro Tag"/>
+		<Label Text="{local:Translate AverageConsumptionInTimespan}"/>
 		<Entry Text="{Binding FormattedAveragePerDay, Mode=OneWay}" IsEnabled="false"/>
 
-		<Label Text="Lager voraussichtlich leer am"/>
+		<Label Text="{local:Translate OutOfSuppliesDate}"/>
 		<Entry Text="{Binding FormattedDateOutOfSupplies}" IsEnabled="false"/>
 
 		<Label Text="Zeitraum" VerticalOptions="FillAndExpand" VerticalTextAlignment="End"/>

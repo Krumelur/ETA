@@ -41,7 +41,7 @@ namespace EtaShared
 		/// <returns></returns>
 		public override async Task InitializeAsync()
 		{
-			this.ShowBusyIndicator("Lade Konfiguration");
+			this.ShowBusyIndicator(Localize("LoadingConfiguration"));
 			await base.InitializeAsync();
 			this.Url = await this.storage.GetConfigValueAsync(SettingServerUrl, string.Empty);
 			var value = await this.storage.GetConfigValueAsync(SettingStorageWarnLevel, "1000");
@@ -57,7 +57,7 @@ namespace EtaShared
 		/// <returns></returns>
 		public async Task SaveAsync()
 		{
-			this.ShowBusyIndicator("Speichere Konfiguration");
+			this.ShowBusyIndicator(Localize("SavingConfiguration"));
 			await this.storage.SetConfigValueAsync(SettingStorageWarnLevel, this.StorageChoices[this.StorageWarningLevelSelectedIndex].ToString());
 			await this.storage.SetConfigValueAsync(SettingStorageCapacity, this.StorageChoices[this.StorageCapacitySelectedIndex].ToString());
 			this.HideBusyIndicator();
@@ -169,10 +169,10 @@ namespace EtaShared
 			get
 			{
 				return new RelayCommand(async () => {
-					bool confirm = await this.ShowMessageAsync("Möchten Sie wirklich die Historie der Vorratswerte löschen?", "Ja", "Nein");
+					bool confirm = await this.ShowMessageAsync(Localize("ReallyDeleteSuppliesHistory"), Localize("Yes"), Localize("No"));
 					if (confirm)
 					{
-						this.ShowBusyIndicator("Lösche Daten");
+						this.ShowBusyIndicator(Localize("DeletingData"));
 						await this.Manager.DeleteSuppliesDataAsync();
 						this.HideBusyIndicator();
 					}
@@ -185,7 +185,7 @@ namespace EtaShared
 			get
 			{
 				return new RelayCommand(async () => {
-					var token = this.ShowBusyIndicator("Teste Verbindung", "Abbrechen");
+					var token = this.ShowBusyIndicator(Localize("TestingConnection"), Localize("Cancel"));
 					var currentConfig = this.Manager.Config;
 					try
 					{
@@ -223,13 +223,13 @@ namespace EtaShared
 						{
 							// Reset config.
 							this.Manager.Config = currentConfig;
-							await this.ShowMessageAsync("Verbindungstest fehlgeschlagen. Bitte ¨¹berpr¨¹fen Sie die Adresse und den Port.", "OK");
+							await this.ShowMessageAsync(Localize("ConnectivityTestFailedVerifyUrlAndPort"), Localize("OK"));
 						}
 						else
 						{
 							// Save config.
 							await this.storage.SetConfigValueAsync(SettingServerUrl, this.Manager.Config.ConnectionAddress);
-							await this.ShowMessageAsync("Verbindung erfolgreich! Neue Verbindungsdaten gespeichert.", "OK");
+							await this.ShowMessageAsync(Localize("ConnectivityTestSuccessfulConfigSaved"), Localize("OK"));
 						}
 					}
 					catch (Exception ex)
@@ -249,7 +249,7 @@ namespace EtaShared
 			get
 			{	
 				return new RelayCommand( async () => {
-					var token = this.uiService.ShowBusyIndicator("Lade Warngrenze", "Abbrechen");
+					var token = this.uiService.ShowBusyIndicator(Localize("LoadingWarningLevel"), Localize("Cancel"));
 					var warningLevel = await this.Manager.GetSuppliesWarningLevelAsync(token);
 					this.uiService.HideBusyIndicator();
 					if(warningLevel != NumericUnit.Empty && warningLevel.Value >= 0)

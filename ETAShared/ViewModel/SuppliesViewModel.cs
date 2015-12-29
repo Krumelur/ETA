@@ -37,7 +37,7 @@ namespace EtaShared
 
 		public async Task UpdateSuppliesAsync()
 		{
-			var token = this.ShowBusyIndicator("Aktualisieren", "Abbrechen");
+			var token = this.ShowBusyIndicator(Localize("Updating"), Localize("Cancel"));
 
 			// Check if we have a server to talk to.
 			bool isServerConfigured = await this.storage.GetConfigValueAsync(SettingsViewModel.SettingServerUrl, null) != null;
@@ -45,7 +45,7 @@ namespace EtaShared
 			if (!isServerConfigured)
 			{
 				this.HideBusyIndicator();
-				await this.uiService.ShowMessageAsync("Bitte konfigurieren Sie erst die Verbindung zum ETA Heizkessel in den Einstellungen.", "OK");
+				await this.uiService.ShowMessageAsync(Localize("ConfigureSettingsFirst"), Localize("OK"));
 				this.navigationService.NavigateTo(NavigationTarget.Settings.ToString());
 				return;
 			}

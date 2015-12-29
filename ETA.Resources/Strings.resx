@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Title_Settings" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="Max_Capacity" xml:space="preserve">
+    <value>Maximalkapazität Lager (kg)</value>
+  </data>
+  <data name="Warn_Capacity" xml:space="preserve">
+    <value>Warngrenze (kg)</value>
+  </data>
+  <data name="Connection_URL" xml:space="preserve">
+    <value>URL/IP Heizkessel</value>
+  </data>
+  <data name="TestConnection" xml:space="preserve">
+    <value>Verbindung testen</value>
+  </data>
+  <data name="Copyright" xml:space="preserve">
+    <value>(c) 2015 René Ruppert - info@c-sharx.net</value>
+  </data>
+  <data name="DeleteHistory" xml:space="preserve">
+    <value>Daten Historie löschen</value>
+  </data>
+  <data name="Contributions" xml:space="preserve">
+    <value>Images from FotoCommunity.de (http://fc-foto.de/32640555) and icons8.com</value>
+  </data>
+  <data name="Title_Supplies" xml:space="preserve">
+    <value>Vorrat</value>
+  </data>
+  <data name="Title_Statistics" xml:space="preserve">
+    <value>Statistiken</value>
+  </data>
+  <data name="TotalConsumptionInTimespan" xml:space="preserve">
+    <value>Gesamtverbrauch</value>
+  </data>
+  <data name="AverageConsumptionInTimespan" xml:space="preserve">
+    <value>Durchschnittsverbrauch</value>
+  </data>
+  <data name="OutOfSuppliesDate" xml:space="preserve">
+    <value>Lager voraussichtlich leer am</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="Title_Messages" xml:space="preserve">
+    <value>Nachrichten</value>
+  </data>
+  <data name="LoadingConfiguration" xml:space="preserve">
+    <value>Lade Konfiguration</value>
+  </data>
+  <data name="SavingConfiguration" xml:space="preserve">
+    <value>Speichere Konfiguration</value>
+  </data>
+  <data name="ReallyDeleteSuppliesHistory" xml:space="preserve">
+    <value>Wirklich komplette Historie löschen?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="DeletingData" xml:space="preserve">
+    <value>Lösche Daten</value>
+  </data>
+  <data name="TestingConnection" xml:space="preserve">
+    <value>Teste Verbindung</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="ConnectivityTestFailedVerifyUrlAndPort" xml:space="preserve">
+    <value>Verbindungstest fehlgeschlagen. Bitte überprüfen Sie URL und Port.</value>
+  </data>
+  <data name="ConnectivityTestSuccessfulConfigSaved" xml:space="preserve">
+    <value>Verbindungstest erfolgreich. Verbindungsdaten gespeichert.</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="LoadingWarningLevel" xml:space="preserve">
+    <value>Lade Warngrenze</value>
+  </data>
+  <data name="Updating" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="ConfigureSettingsFirst" xml:space="preserve">
+    <value>Bitte konfigurieren Sie zuerst die Einstellungen</value>
+  </data>
+  <data name="7Days" xml:space="preserve">
+    <value>7 Tage</value>
+  </data>
+  <data name="2Weeks" xml:space="preserve">
+    <value>2 Wochen</value>
+  </data>
+  <data name="1Month" xml:space="preserve">
+    <value>1 Monat</value>
+  </data>
+  <data name="2Months" xml:space="preserve">
+    <value>2 Monate</value>
+  </data>
+  <data name="3Months" xml:space="preserve">
+    <value>3 Monate</value>
+  </data>
+  <data name="4Months" xml:space="preserve">
+    <value>4 Monate</value>
+  </data>
+  <data name="5Months" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="6Months" xml:space="preserve">
+    <value>6 Monate</value>
+  </data>
+  <data name="12Months" xml:space="preserve">
+    <value>12 Monate</value>
+  </data>
+  <data name="AllData" xml:space="preserve">
+    <value>Alle Daten</value>
+  </data>
+  <data name="UpdatingStatistics" xml:space="preserve">
+    <value>Aktualisiere Statistiken</value>
+  </data>
+  <data name="NotEnoughData" xml:space="preserve">
+    <value>(nicht genügend Daten)</value>
+  </data>
+  <data name="NoCalculationPossible" xml:space="preserve">
+    <value>(Berechnung nicht möglich)</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+    <value>Initialisierung</value>
+  </data>
+  <data name="UpdatingMessages" xml:space="preserve">
+    <value>Aktualisiere Nachrichten</value>
+  </data>
+
+</root>

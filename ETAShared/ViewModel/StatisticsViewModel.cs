@@ -16,16 +16,16 @@ namespace EtaShared
 		{
 			var formattedChoices = new List<string>
 			{
-				"7 Tage",
-				"2 Wochen",
-				"1 Monat",
-				"2 Monate",
-				"3 Monate",
-				"4 Monate",
-				"5 Monate",
-				"6 Monate",
-				"12 Monate",
-				"Alles"
+				Localize("7Days"),
+				Localize("2Weeks"),
+				Localize("1Month"),
+				Localize("2Months"),
+				Localize("3Months"),
+				Localize("4Months"),
+				Localize("5Months"),
+				Localize("6Months"),
+				Localize("12Months"),
+				Localize("AllData")
 			};
 
 			var now = DateTime.Now;
@@ -129,14 +129,14 @@ namespace EtaShared
 		/// <returns></returns>
 		public override async Task InitializeAsync()
 		{
-			this.ShowBusyIndicator("Aktualisiere Statisiken");
+			this.ShowBusyIndicator(Localize("UpdatingStatistics"));
 			await base.InitializeAsync();
 			this.HideBusyIndicator();
 		}
 
 		public async Task UpdateStatisticsAsync()
 		{
-			var token = this.ShowBusyIndicator("Aktualisiere Statisiken", "Abbrechen");
+			var token = this.ShowBusyIndicator(Localize("UpdatingStatistics"), Localize("Cancel"));
 
 			var start = this.timeSpanChoices[this.TimeSpanSelectedIndex];
 
@@ -145,7 +145,7 @@ namespace EtaShared
 
 			if (averageConsumptionPerDay == NumericUnit.Empty)
 			{
-				this.FormattedAveragePerDay = "(nicht genug Daten)";
+				this.FormattedAveragePerDay = Localize("NotEnoughData");
 			}
 			else
 			{
@@ -155,7 +155,7 @@ namespace EtaShared
 			var consumption = await this.Manager.GetTotalConsumptionAsync(supplies);
 			if (consumption == NumericUnit.Empty)
 			{
-				this.FormattedConsumption = "(nicht genug Daten)";
+				this.FormattedConsumption = Localize("NotEnoughData");
 			}
 			else
 			{
@@ -173,7 +173,7 @@ namespace EtaShared
 			}
 			else
 			{
-				this.FormattedDateOutOfSupplies = "(keine Berechnung m?glich)"; 
+				this.FormattedDateOutOfSupplies = Localize("NoCalculationPossible"); 
 			}
 
 			this.HideBusyIndicator();

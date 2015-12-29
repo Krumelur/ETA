@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ContentPage
-	Title="Vorrat"
+	Title="{local:Translate Title_Supplies}"
 	Icon="wood.png"
 	xmlns="http://xamarin.com/schemas/2014/forms"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -19,7 +19,7 @@
 			</Style>
 
 			<Style x:Key="SuppliesDisplayStyle" TargetType="Label">
-				<Setter Property="Font" Value="Bold,60"/>
+				<Setter Property="Font" Value="Bold,55"/>
 				<Setter Property="TextColor" Value="Black"/>
 				<Setter Property="HorizontalTextAlignment" Value="Center"/>
 				<!--
@@ -30,7 +30,7 @@
 	</ContentPage.Resources>
 
 	<ContentPage.ToolbarItems>
-		<ToolbarItem Name="Aktualisieren" Command="{Binding UpdateSuppliesInfoCommand}"/>
+		<ToolbarItem Name="{local:Translate Refresh}" Command="{Binding UpdateSuppliesInfoCommand}"/>
 	</ContentPage.ToolbarItems>
 
 	<Grid>

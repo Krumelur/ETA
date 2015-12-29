@@ -206,8 +206,9 @@ namespace EtaShared
 						int port = 8080;
 						if (hostName.Contains(":"))
 						{
-							hostName = hostName.Split(':')[0];
-							port = Convert.ToInt32(hostName.Split(':')[1]);
+							var parts = hostName.Split(':');
+							hostName = parts[0];
+							port = Convert.ToInt32(parts[1]);
 						}
 						// Update manager's config.
 						this.Manager.Config = new EtaConfig(protocol + hostName + ":" + port);

@@ -57,6 +57,7 @@
 		<Button Text="Daten Historie löschen" Command="{Binding DeleteDataCommand}" BackgroundColor="Red" TextColor="White"/>
 		<Label Text="Copyright (c) 2015 c-sharX (René Ruppert)" HorizontalTextAlignment="Center"/>
 		<Label Text="info@c-sharx.net" HorizontalTextAlignment="Center" />
+		<Label Text="Images from FotoCommunity.de (http://fc-foto.de/32640555) and icons8.com" HorizontalTextAlignment="Center" Font="Micro"/>
 	</StackLayout>
 	
 </ContentPage>

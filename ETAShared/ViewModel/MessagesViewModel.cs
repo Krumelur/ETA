@@ -46,7 +46,10 @@ namespace EtaShared
 			var token = this.ShowBusyIndicator("Aktualisiere Meldungen", "Abbrechen");
 
 			var errors =  await this.Manager.GetErrorsAsync (token);
-			this.Messages = errors;
+			if (errors != null)
+			{
+				this.Messages = errors;
+			}
 
 			this.HideBusyIndicator();
 		}

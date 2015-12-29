@@ -262,13 +262,15 @@ namespace EtaShared
 					var error = new EtaError(msg, desc, time, errorType);
 					errors.Add(error);
 				}
+
+				return errors;
 			}
 			catch (Exception ex)
 			{
 				this.Logger?.Log(ex);
 			}
 
-			return errors;
+			return null;
 		}
 
 		public async Task<IList<ISupplyData>> GetSuppliesInRangeAsync(DateTime start, DateTime end)

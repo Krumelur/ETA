@@ -104,7 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ETAShared\EtaShared.csproj">
-      <Project>{BFF8A6FE-174C-4E09-9E4F-BFE2C108E044}</Project>
+      <Project>{bff8a6fe-174c-4e09-9e4f-bfe2c108e044}</Project>
       <Name>EtaShared</Name>
     </ProjectReference>
   </ItemGroup>

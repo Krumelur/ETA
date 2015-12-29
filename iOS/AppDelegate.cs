@@ -57,24 +57,27 @@ namespace ETA.iOS
 			cts.CancelAfter (TimeSpan.FromSeconds (20));
 			try
 			{
-				var errorMsg = await this.formsApp.RunBackgroundUpdate (cts.Token);
+				var errorMsg = await this.formsApp.RunBackgroundUpdate(cts.Token);
 
 				if (errorMsg != null)
 				{
-					var lastNotification = (string)((NSString)NSUserDefaults.StandardUserDefaults.ValueForKey (new NSString ("lastNotification")));
+					var lastNotification = (string)((NSString)NSUserDefaults.StandardUserDefaults.ValueForKey(new NSString("lastNotification")));
 					if (lastNotification != errorMsg)
 					{
-						var notif = new UILocalNotification { 
+						var notif = new UILocalNotification
+						{
 							AlertBody = errorMsg
 						};
-						UIApplication.SharedApplication.PresentLocalNotificationNow (notif);
+						UIApplication.SharedApplication.PresentLocalNotificationNow(notif);
 					}
-					NSUserDefaults.StandardUserDefaults.SetString (errorMsg, "lastNotification");
+					NSUserDefaults.StandardUserDefaults.SetString(errorMsg, "lastNotification");
 				}
+				completionHandler(UIBackgroundFetchResult.NewData);
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine ("Failed to execute in background: " + ex);
+				Console.WriteLine("Failed to execute in background: " + ex);
+				completionHandler(UIBackgroundFetchResult.Failed);
 			}
 		}
 	}

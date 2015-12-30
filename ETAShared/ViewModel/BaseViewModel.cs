@@ -21,7 +21,7 @@ namespace EtaShared
 		{
 			var hostName = await this.storage.GetConfigValueAsync(SettingsViewModel.SettingServerUrl, null);
 			this.Manager.Config = new EtaConfig(hostName);
-			if (this.Manager.Config.Host.Contains("demo"))
+			if (this.Manager.Config.Host != null && this.Manager.Config.Host.Contains("demo"))
 			{
 				this.Manager.EnableDemoMode();
 			}

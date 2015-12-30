@@ -20,7 +20,6 @@ namespace ETA
 			// Make view model locator globally available as a resource.
 			this.locator = new ViewModelLocator(databasePath, uiService, platformSpecific, navigationService);
 			this.Resources.Add("Locator", this.locator);
-			
 			var tabbedPage = new TabbedPage();
 			
 			tabbedPage.Children.Add(this.WrapInNavPage(new SuppliesStatusPage()));

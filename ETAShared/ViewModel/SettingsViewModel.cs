@@ -191,6 +191,11 @@ namespace EtaShared
 					{
 						string hostName = this.Url.ToLowerInvariant();
 
+						if (hostName.Contains("demo"))
+						{
+							this.Manager.EnableDemoMode();
+						}
+					
 						string protocol = "http://";
 						if (hostName.StartsWith("http://"))
 						{

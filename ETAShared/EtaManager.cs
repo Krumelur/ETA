@@ -53,6 +53,12 @@ namespace EtaShared
 			}
 		}
 		EtaConfig config;
+
+		public void EnableDemoMode()
+		{
+			this.Logger?.Log("Switching to demo mode!");
+			this.webApi = new DemoWebApi();
+		}
 		
 		/// <summary>
 		/// Helper to check config before performing a call to the web API.

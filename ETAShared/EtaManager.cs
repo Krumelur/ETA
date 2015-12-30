@@ -331,7 +331,7 @@ namespace EtaShared
 				}
 			});
 
-			if (averagesPerDay.Count >= 2)
+			if (averagesPerDay.Count >= 1)
 			{
 				var totalAveragePerDay = averagesPerDay.Average();
 				return new NumericUnit(totalAveragePerDay, "kg");

@@ -86,7 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ETA.Resources\ETA.Resources.csproj">
-      <Project>{7f85f628-3832-4b49-b69d-e08dfcc5cf2c}</Project>
+      <Project>{7F85F628-3832-4B49-B69D-E08DFCC5CF2C}</Project>
       <Name>ETA.Resources</Name>
     </ProjectReference>
   </ItemGroup>

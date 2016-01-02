@@ -165,7 +165,7 @@ namespace EtaShared
 			// Get from server.
 			var currentSupplies = await this.Manager.GetSuppliesAsync(token);
 
-			if (currentSupplies != NumericUnit.Empty && averageConsumptionPerDay != NumericUnit.Empty)
+			if (currentSupplies != NumericUnit.Empty && averageConsumptionPerDay.Value > 0)
 			{
 				var daysLeft = currentSupplies / averageConsumptionPerDay.Value;
 				var outOfSupplies = DateTime.Now.AddDays(daysLeft);

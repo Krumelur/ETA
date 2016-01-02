@@ -163,11 +163,9 @@
     <Compile Include="PlatformServices.cs" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\pellets_background.png" />
     <BundleResource Include="Resources\wood%403x.png" />
     <BundleResource Include="Resources\wood.png" />
     <BundleResource Include="Resources\pellets_foreground.png" />
-    <BundleResource Include="Resources\wood_background.jpg" />
     <BundleResource Include="Resources\statistics.png" />
     <BundleResource Include="Resources\statistics%402x.png" />
     <BundleResource Include="Resources\statistics%403x.png" />

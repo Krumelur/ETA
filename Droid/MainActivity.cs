@@ -8,17 +8,39 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using System.IO;
+using Xamarin.Forms.Platform.Android;
+using EtaShared;
+using Xamarin.Forms;
 
 namespace ETA.Droid
 {
-	[Activity (Label = "ETA.Droid", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
+	[Activity (Label = "ETA Check", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+	public class MainActivity : FormsAppCompatActivity
 	{
+		public void Remind (DateTime dateTime, string title, string message)
+		{
+
+//			Intent alarmIntent = new Intent(Forms.Context, typeof(AlarmReceiver));
+//			alarmIntent.PutExtra ("message", message);
+//			alarmIntent.PutExtra ("title", title);
+//
+//			PendingIntent pendingIntent = PendingIntent.GetBroadcast(Forms.Context, 0, alarmIntent, PendingIntentFlags.UpdateCurrent);
+//			AlarmManager alarmManager = (AlarmManager) Forms.Context.GetSystemService(Context.AlarmService);
+//
+//			var delay = dateTime - DateTime.Now;
+//			alarmManager.Set(AlarmType.RtcWakeup, SystemClock.ElapsedRealtime () + delay.Milliseconds, pendingIntent);
+		}
+
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 
+			Xamarin.Insights.Initialize (InsightsKey.ApiKey, this);
+
 			global::Xamarin.Forms.Forms.Init (this, bundle);
+
+			FormsAppCompatActivity.ToolbarResource = Resource.Layout.toolbar;
+			FormsAppCompatActivity.TabLayoutResource = Resource.Layout.tabs;
 
 			// Code for starting up the Xamarin Test Cloud Agent
 			#if ENABLE_TEST_CLOUD
@@ -36,6 +58,8 @@ namespace ETA.Droid
 
 			var formsApp = new App (fullPath, new PlatformSpecific ());
 			LoadApplication (formsApp);
+
+			this.Remind(DateTime.Now + TimeSpan.FromSeconds(10), "Hello", "World");
 		}
 	}
 }

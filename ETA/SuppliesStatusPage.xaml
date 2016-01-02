@@ -26,6 +26,8 @@
 				<Setter Property="BackgroundColor" Value="{x:Static local:StaticUI.PercentageLabelBackgroundColor}"/>
 				-->
 			</Style>
+
+			<local:OffsetConverter x:Key="offsetConverter"/>
 		</ResourceDictionary>
 	</ContentPage.Resources>
 
@@ -61,6 +63,7 @@
 			<Label Text="0%" Style="{StaticResource PercentageIndexStyle}" AbsoluteLayout.LayoutFlags="YProportional" AbsoluteLayout.LayoutBounds="5, 1.0, 50, -1" AnchorY="0.5"/>
 
 			<StackLayout 
+				x:Name="fillStatusLayout"
 				AbsoluteLayout.LayoutFlags="XProportional"
 				AbsoluteLayout.LayoutBounds="0.5, -30, -1, -1"
 				AnchorX="0.5"

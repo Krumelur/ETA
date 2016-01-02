@@ -52,6 +52,7 @@ namespace ETA.iOS
 
 		public async override void PerformFetch (UIApplication application, Action<UIBackgroundFetchResult> completionHandler)
 		{
+			Console.WriteLine("Performing background fetch.");
 			var cts = new CancellationTokenSource ();
 			// We have maximum 30 seconds in background mode - cancel early.
 			cts.CancelAfter (TimeSpan.FromSeconds (20));

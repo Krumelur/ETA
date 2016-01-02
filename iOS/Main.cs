@@ -1,4 +1,5 @@
 using UIKit;
+using EtaShared;
 
 namespace ETA.iOS
 {
@@ -6,7 +7,7 @@ namespace ETA.iOS
 	{
 		static void Main (string[] args)
 		{
-			Xamarin.Insights.Initialize (global::ETA.iOS.XamarinInsights.ApiKey);
+			Xamarin.Insights.Initialize (InsightsKey.ApiKey);
 			UIApplication.Main (args, null, typeof(AppDelegate));
 		}
 	}

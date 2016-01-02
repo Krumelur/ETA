@@ -1,6 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 using EtaShared;
+using Xamarin.Forms.Xaml;
 
 namespace ETA
 {
@@ -12,6 +13,16 @@ namespace ETA
 		{
 			this.InitializeComponent();
 			this.locator = (ViewModelLocator)Application.Current.Resources["Locator"];
+
+			// Must manually adjust translation on Android. Seems like the anchor settings are not working the same on Android.
+			this.locator.Supplies.PropertyChanged += (sender, e) => {
+				var s = this.locator.Supplies;
+				var propName = nameof(s.SuppliesFillAbsoluteValue);
+				if(Device.OS == TargetPlatform.Android && e.PropertyName == propName)
+				{
+					this.fillStatusLayout.TranslationY = s.SuppliesFillAbsoluteValue - 50;
+				}
+			};
 		}
 
 		protected async override void OnAppearing()

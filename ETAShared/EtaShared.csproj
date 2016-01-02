@@ -56,6 +56,7 @@
     <Compile Include="ViewModel\SuppliesViewModel.cs" />
     <Compile Include="ViewModel\StatisticsViewModel.cs" />
     <Compile Include="ViewModel\MessagesViewModel.cs" />
+    <Compile Include="Support\InsightsKey.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

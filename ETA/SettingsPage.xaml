@@ -22,7 +22,19 @@
 					<ColumnDefinition Width="30" />
 				</Grid.ColumnDefinitions>
 				<Picker Grid.Column="0" HorizontalOptions="FillAndExpand" VerticalOptions="Center" local:PickerCollection.Items="{Binding FormattedStorageChoices}" SelectedIndex="{Binding StorageWarningLevelSelectedIndex, Mode=TwoWay}" />
-				<Button Grid.Column="1" Image="refresh.png" HorizontalOptions="End" Command="{Binding RefreshWarningLevelCommand}" />
+				<Button Grid.Column="1" Image="refresh.png" HorizontalOptions="End" Command="{Binding RefreshWarningLevelCommand}" IsVisible="true">
+					<Button.IsVisible>
+						<OnPlatform x:TypeArguments="x:Boolean" Android="False" iOS="true"/>
+					</Button.IsVisible>
+				</Button>
+				<Image Grid.Column="1" Source="refresh.png" HeightRequest="30" Aspect="AspectFill" IsVisible="false">
+					<Image.IsVisible>
+						<OnPlatform x:TypeArguments="x:Boolean" Android="True" />
+					</Image.IsVisible>
+					<Image.GestureRecognizers>
+						<TapGestureRecognizer Command="{Binding RefreshWarningLevelCommand}"/>
+					</Image.GestureRecognizers>
+				</Image>
 			</Grid>
 			<Label Text="{local:Translate Connection_URL}" />
 			<Entry x:Name="UrlEntry" Placeholder="192.168.178:8080" Keyboard="Url" Text="{Binding Url}" />

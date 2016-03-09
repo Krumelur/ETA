@@ -56,7 +56,14 @@ namespace EtaShared
 
 		protected void HideBusyIndicator()
 		{
-			this.uiService.HideBusyIndicator();
+			try
+			{
+				this.uiService.HideBusyIndicator();
+			}
+			catch(Exception)
+			{
+				// Throws sometimes on Android...god knows why. 
+			}
 		}
 
 		protected static string Localize(string constant)

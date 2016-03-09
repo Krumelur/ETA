@@ -137,8 +137,17 @@ namespace EtaShared
 
 		public async Task<ISupplyData> GetLatestCachedSupplyAsync()
 		{
-			var cachedSupplies = await this.storage.GetLatestSupplyDataAsync();
-			return cachedSupplies;
+			try
+			{
+				var cachedSupplies = await this.storage.GetLatestSupplyDataAsync();
+				return cachedSupplies;
+			}
+			catch(Exception ex)
+			{
+				this.Logger?.Log(ex);
+			}
+
+			return null;
 		}
 
 		public async Task<NumericUnit> GetSuppliesAsync(CancellationToken token = default(CancellationToken))

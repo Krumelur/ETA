@@ -36,8 +36,7 @@ namespace ETA.iOS
 			UINavigationBar.Appearance.SetTitleTextAttributes(new UITextAttributes { TextColor = UIColor.White });
 			*/
 
-			// Run background fetch maximum once every 12 hours.
-			app.SetMinimumBackgroundFetchInterval (TimeSpan.FromHours (15).TotalSeconds);
+			app.SetMinimumBackgroundFetchInterval (UIApplication.BackgroundFetchIntervalMinimum);
 
 			var settings = UIUserNotificationSettings.GetSettingsForTypes (UIUserNotificationType.Alert, new NSSet ());
 			if (UIApplication.SharedApplication.CurrentUserNotificationSettings != settings)

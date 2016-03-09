@@ -61,6 +61,12 @@ namespace ETA.Droid
 
 			this.Remind(DateTime.Now + TimeSpan.FromSeconds(10), "Hello", "World");
 		}
+
+		protected override void OnDestroy ()
+		{
+			base.OnDestroy ();
+			ViewModelLocator.Cleanup();
+		}
 	}
 }
 

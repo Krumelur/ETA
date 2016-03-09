@@ -95,6 +95,7 @@ namespace EtaShared
 		public static void Cleanup ()
 		{
 			// TODO Clear the ViewModels
+			SimpleIoc.Default.Reset();
 		}
 	}
 }

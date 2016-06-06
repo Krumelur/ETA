@@ -37,6 +37,8 @@ namespace ETA.Droid
 
 			Xamarin.Insights.Initialize (InsightsKey.ApiKey, this);
 
+			Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
+
 			global::Xamarin.Forms.Forms.Init (this, bundle);
 
 			FormsAppCompatActivity.ToolbarResource = Resource.Layout.toolbar;

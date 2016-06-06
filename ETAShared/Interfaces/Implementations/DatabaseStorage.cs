@@ -202,6 +202,9 @@ namespace EtaShared
 				await this.connection.UpdateAsync(item).ConfigureAwait(false);
 			}
 
+			await AzureDataService.Instance.InitializeAsync ();
+			await AzureDataService.Instance.AddSupplyAsync (item);
+
 			return item;
 		}
 

@@ -51,7 +51,6 @@ namespace EtaShared
 			{
 				Debug.Assert(item != null);
 
-				this.Id = item.Id;
 				this.Amount = item.Amount;
 				this.TimeStamp = item.TimeStamp;
 				this.Unit = item.Unit;
@@ -201,9 +200,6 @@ namespace EtaShared
 			{
 				await this.connection.UpdateAsync(item).ConfigureAwait(false);
 			}
-
-			await AzureDataService.Instance.InitializeAsync ();
-			await AzureDataService.Instance.AddSupplyAsync (item);
 
 			return item;
 		}

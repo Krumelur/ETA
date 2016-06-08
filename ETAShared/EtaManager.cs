@@ -178,7 +178,9 @@ namespace EtaShared
 			{
 				// Check if there is a value that's younger than 12 hours. If yes, update it. 
 				// If not, create a new entry.
-				var halfDayAgo = DateTime.Now - TimeSpan.FromHours(12);
+				//var halfDayAgo = DateTime.Now - TimeSpan.FromHours(12);
+				// TODO: REMOVE!
+				var halfDayAgo = DateTime.Now - TimeSpan.FromSeconds(1);
 				var existingEntries = await this.storage.GetSupplyDataAsync(x => x.TimeStamp >= halfDayAgo).ConfigureAwait(false);
 				ISupplyData data = existingEntries?.FirstOrDefault();
 				if (data == null)

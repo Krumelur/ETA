@@ -35,13 +35,13 @@ namespace EtaShared
 			SimpleIoc.Default.Register<INavigationService>(() => navigationService);
 			SimpleIoc.Default.Register<IEtaWebApi, EtaWebApi>();
 			SimpleIoc.Default.Register<ILogger, DebugLogger>();
-			SimpleIoc.Default.Register<IStorage, DatabaseStorage>();
+			SimpleIoc.Default.Register<IStorage, AzureStorage>();
 			// Factory to create ISupplyData items.
 			Func<ISupplyData> supplyDataCreator = () => new SupplyData();
 			SimpleIoc.Default.Register<Func<ISupplyData>>(() => supplyDataCreator);
 			SimpleIoc.Default.Register<EtaManager>();
 
-			var dbStorage = (DatabaseStorage)SimpleIoc.Default.GetInstance<IStorage>();
+			var dbStorage = (AzureStorage)SimpleIoc.Default.GetInstance<IStorage>();
 			dbStorage.DatabasePath = databasePath;
 
 			// View Models.

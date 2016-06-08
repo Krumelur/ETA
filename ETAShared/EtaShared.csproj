@@ -57,7 +57,7 @@
     <Compile Include="ViewModel\StatisticsViewModel.cs" />
     <Compile Include="ViewModel\MessagesViewModel.cs" />
     <Compile Include="Support\InsightsKey.cs" />
-    <Compile Include="Interfaces\Implementations\AzureMobileService.cs" />
+    <Compile Include="Interfaces\Implementations\AzureStorage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

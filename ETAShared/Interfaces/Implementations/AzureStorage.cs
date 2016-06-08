@@ -8,6 +8,7 @@ using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using Microsoft.WindowsAzure.MobileServices.Sync;
 using Newtonsoft.Json;
+using ModernHttpClient;
 
 namespace EtaShared
 {
@@ -97,7 +98,7 @@ namespace EtaShared
 			var store = new MobileServiceSQLiteStore(this.DatabasePath);
 			store.DefineTable<AzureSupplyDataItem>();
 			store.DefineTable<AzureConfigItem>();
-			this.mobileServiceClient = new MobileServiceClient("https://reneruppert.azurewebsites.net");
+			this.mobileServiceClient = new MobileServiceClient("https://reneruppert.azurewebsites.net", new NativeMessageHandler());
 			await this.mobileServiceClient.SyncContext.InitializeAsync(store, new MobileServiceSyncHandler());
 
 			suppliesTable = this.mobileServiceClient.GetSyncTable<AzureSupplyDataItem>();
@@ -186,12 +187,13 @@ namespace EtaShared
 
 			await this.InitDatabase();
 
+			var item = supplyData as AzureSupplyDataItem;
+
 			if (!(supplyData is AzureSupplyDataItem))
 			{
-				throw new InvalidOperationException ("Item to save must be of type " + nameof (AzureSupplyDataItem) + "!");
+				item = new AzureSupplyDataItem(supplyData);
 			}
 
-			var item = supplyData as AzureSupplyDataItem;
 
 			if (item.Id == null)
 			{
